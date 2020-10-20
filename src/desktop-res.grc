@@ -1,0 +1,109 @@
+; Note that MENU can define both menues and submenues.
+; If you want to use any C operators (such as "|", "&", etc.), do it WITHOUT
+; any spaces between the arguments (the parser is simple and weak).
+
+MENU geosMenu 0,15 VERTICAL
+; This is a vertical menu, placed at (15,0).
+{
+; There are three items, all of them will call functions.
+; The first and third ones are normal functions, see GEOSLib documentation for
+; information about what the second function should return (it's a dynamic one).
+	"GEOS info" MENU_ACTION mnu_geos_geosInfo
+    "desktop info" MENU_ACTION mnu_geos_desktopInfo
+    "select printer" MENU_ACTION mnu_geos_selectPrinter
+    "select input" MENU_ACTION mnu_geos_selectInput
+}
+
+MENU fileMenu 30,15 VERTICAL
+; This is a vertical menu, placed at (15,0).
+{
+    "open" MENU_ACTION mnu_file_open
+    "duplicate" MENU_ACTION mnu_file_duplicate
+    "rename" MENU_ACTION mnu_file_rename
+    "info" MENU_ACTION mnu_file_info
+    "print" MENU_ACTION mnu_file_print
+    "delete" MENU_ACTION mnu_file_delete
+    "undo delete" MENU_ACTION mnu_file_undodelete
+}
+
+MENU viewMenu 50,15 VERTICAL
+{
+    "by icon" MENU_ACTION mnu_view_byicon
+    "by size" MENU_ACTION mnu_view_bysize
+    "by type" MENU_ACTION mnu_view_bytype
+    "by date" MENU_ACTION mnu_view_bydate
+    "by name" MENU_ACTION mnu_view_byname
+}
+
+MENU diskMenu 77,15 VERTICAL
+{
+    "open" MENU_ACTION mnu_disk_open
+    "close" MENU_ACTION mnu_disk_close
+    "rename" MENU_ACTION mnu_disk_rename
+    "copy" MENU_ACTION mnu_disk_copy
+    "validate" MENU_ACTION mnu_disk_validate
+    "erase" MENU_ACTION mnu_disk_erase
+    "format" MENU_ACTION mnu_disk_format
+}
+
+MENU selectMenu 101,15 VERTICAL
+{
+    "all pages" MENU_ACTION mnu_select_allpages
+    "page files" MENU_ACTION mnu_select_pagefiles
+    "border files" MENU_ACTION mnu_select_borderfiles
+}
+
+MENU pageMenu 133,15 VERTICAL
+{
+    "append" MENU_ACTION mnu_page_append
+    "delete" MENU_ACTION mnu_page_delete
+}
+
+MENU optionsMenu 161,15 VERTICAL
+{
+    "set clock" MENU_ACTION mnu_options_setclock
+    "RESET" MENU_ACTION mnu_options_reset
+    "BASIC" MENU_ACTION mnu_options_basic
+    "shortcuts" MENU_ACTION mnu_options_shortcuts
+}
+
+;; Format:  MENU "name" left,top ALIGN { "itemname" TYPE pointer ... }
+
+;; =================================================================================
+;; MAIN MENU
+;; =================================================================================
+MENU mainMenu 0,0 HORIZONTAL
+; Here, we have our main menu, placed at (0,0), and it is a horizontal menu.
+; Because it is a top-level menu, you would register it in your C source by
+; using:  DoMenu(&mainMenu);
+{
+; There are two items -- a submenu and an action.
+; This calls a submenu named subMenu1 (see previous definition).
+;    "first sub-menu" SUB_MENU subMenu1
+; This will work the same as an EnterDeskTop() call in C source code.
+    "geos" SUB_MENU geosMenu
+	"file" SUB_MENU fileMenu
+    "view" SUB_MENU viewMenu
+    "disk" SUB_MENU diskMenu
+    "select" SUB_MENU selectMenu
+    "page" SUB_MENU pageMenu
+    "options" SUB_MENU optionsMenu
+}
+
+
+
+;; Format:  HEADER <GEOS_TYPE> "dosname" "classname" "version"
+
+HEADER APPLICATION "DESK TOP" "DESKtOP am" "V2.0"
+; This is a header for an APPLICATION which will be seen in the directory as a
+; file named MyFirstApp with the Class-string "Class Name V1.0"
+{
+; Not all fields are required, default and current values will be used.
+    author "Scott Hutter"   ; always in quotes!
+    info "Use the desktop to manage and manipulate your files"     ; always in quotes!
+;    date 88 08 19 13 35        ; always 5 fields!
+;    dostype USR                ; can be:  PRG, SEQ, USR (only all UPPER- or lower-case)
+;    structure SEQ              ; can be:  SEQ, VLIR (only UPPER- or lower-case)
+    mode any                ; can be:  any, 40only, 80only, c64only
+	icon "desktop.icon"
+}
