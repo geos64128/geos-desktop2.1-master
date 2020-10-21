@@ -147,11 +147,14 @@ void mnu_options_setclock (void)
 void mnu_options_reset (void)
 {
     GotoFirstMenu();
+    iconHandlerDrv(PEEK(0x8489));
+    
 };
 
 void mnu_options_basic (void)
 {
-    GotoFirstMenu();
+    remove_hook();
+    ToBASIC();
 };
 
 void mnu_options_shortcuts (void)

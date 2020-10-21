@@ -17,6 +17,11 @@ struct filehandle *curFileHandle;
 
 struct icontab myicontab;
 
+void updatePadHeader();
+void updateDriveIcons();
+void updateDirectory();
+void initIconTable();
+
 void NewVectorHandler(void) {
         // update time
         
@@ -86,6 +91,44 @@ void iconHandler()
     ToBASIC();
 }
 
+void iconHandlerDrv(unsigned char deviceNumber)
+{
+    drawPad();
+
+    SetDevice(deviceNumber);
+    OpenDisk();
+
+    updatePadHeader();
+    
+    initIconTable();
+    DoIcons(&myicontab);
+
+    updateDriveIcons();
+    DoIcons(&myicontab);
+
+    updateDirectory();
+    DoIcons(&myicontab);
+
+    updateDriveIcons();
+    DoIcons(&myicontab);
+}
+
+void iconHandlerDrvA()
+{
+    iconHandlerDrv(8);
+}
+
+void iconHandlerDrvB()
+{
+    iconHandlerDrv(9);
+}
+
+void iconHandlerDrvC()
+{
+    iconHandlerDrv(10);
+}
+
+
 char *getDriveIcon(unsigned char id)
 {
     switch (id)
@@ -122,21 +165,21 @@ void initIconTable()
     myicontab.tab[0].y = 22;
     myicontab.tab[0].width = 3; // * 8
     myicontab.tab[0].heigth = 21;
-    myicontab.tab[0].proc_ptr = (unsigned) iconHandler;
+    myicontab.tab[0].proc_ptr = (unsigned) iconHandlerDrvA;
 
     myicontab.tab[1].pic_ptr = 0;
     myicontab.tab[1].x = 35; // * 8 
     myicontab.tab[1].y = 54;
     myicontab.tab[1].width = 3; // * 8 
     myicontab.tab[1].heigth = 21;
-    myicontab.tab[1].proc_ptr = (unsigned)  iconHandler;
+    myicontab.tab[1].proc_ptr = (unsigned)  iconHandlerDrvB;
 
     myicontab.tab[2].pic_ptr = 0;
     myicontab.tab[2].x = 35; // * 8 
     myicontab.tab[2].y = 86;
     myicontab.tab[2].width = 3; // * 8 
     myicontab.tab[2].heigth = 21;
-    myicontab.tab[2].proc_ptr = (unsigned)  iconHandler;
+    myicontab.tab[2].proc_ptr = (unsigned)  iconHandlerDrvC;
 
     myicontab.tab[3].pic_ptr = 0;
     myicontab.tab[3].x = 35; // * 8 
@@ -320,17 +363,7 @@ void main(void)
     initIconTable();
     DoMenu(&mainMenu);
 
-    drawPad();
-    updatePadHeader();
-    
-    updateDriveIcons();
-    DoIcons(&myicontab);
-
-    updateDirectory();
-    DoIcons(&myicontab);
-
-    updateDriveIcons();
-    DoIcons(&myicontab);
+    iconHandlerDrv(PEEK(0x8489));
     
     hook_into_system();
     MainLoop();
