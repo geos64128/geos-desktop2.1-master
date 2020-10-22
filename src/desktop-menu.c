@@ -2,6 +2,8 @@
 void mnu_geos_geosInfo (void)
 {
     GotoFirstMenu();
+
+    DlgBoxOk("DESKTOP v2.1", "Written By Scott Hutter - 2020");
 };
 
 void mnu_geos_desktopInfo (void)
@@ -147,7 +149,7 @@ void mnu_options_setclock (void)
 void mnu_options_reset (void)
 {
     GotoFirstMenu();
-    iconHandlerDrv(PEEK(0x8489));
+    switchDevice(PEEK(0x8489));
     
 };
 
