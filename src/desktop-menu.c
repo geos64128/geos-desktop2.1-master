@@ -149,7 +149,7 @@ void mnu_options_setclock (void)
 void mnu_options_reset (void)
 {
     GotoFirstMenu();
-    switchDevice(PEEK(0x8489));
+    changeDevice(PEEK(0x8489));
     
 };
 

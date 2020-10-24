@@ -93,28 +93,28 @@ void initIconTable()
 //
     myicontab->tab[11].pic_ptr = 0;
     myicontab->tab[11].x = 5; // * 8 
-    myicontab->tab[11].y = 95;
+    myicontab->tab[11].y = 90;
     myicontab->tab[11].width = 3; // * 8 
     myicontab->tab[11].heigth = 21;
     myicontab->tab[11].proc_ptr = (unsigned)  iconHandler;
 
     myicontab->tab[12].pic_ptr = 0;
     myicontab->tab[12].x = 12; // * 8 
-    myicontab->tab[12].y = 95;
+    myicontab->tab[12].y = 90;
     myicontab->tab[12].width = 3; // * 8 
     myicontab->tab[12].heigth = 21;
     myicontab->tab[12].proc_ptr = (unsigned)  iconHandler;
 
     myicontab->tab[13].pic_ptr = 0;
     myicontab->tab[13].x = 19; // * 8 
-    myicontab->tab[13].y = 95;
+    myicontab->tab[13].y = 90;
     myicontab->tab[13].width = 3; // * 8 
     myicontab->tab[13].heigth = 21;
     myicontab->tab[13].proc_ptr = (unsigned)  iconHandler;
 
     myicontab->tab[14].pic_ptr = 0;
     myicontab->tab[14].x = 26; // * 8 
-    myicontab->tab[14].y = 95;
+    myicontab->tab[14].y = 90;
     myicontab->tab[14].width = 3; // * 8 
     myicontab->tab[14].heigth = 21;
     myicontab->tab[14].proc_ptr = (unsigned)  iconHandler;
@@ -166,23 +166,23 @@ void iconHandler()
 
 void iconHandlerDrvA()
 {
-    switchDevice(8);
+    changeDevice(8);
 }
 
 void iconHandlerDrvB()
 {
-    switchDevice(9);
+    changeDevice(9);
 }
 
 void iconHandlerDrvC()
 {
-    switchDevice(10);
+    changeDevice(10);
 }
 
 
 void iconHandlerDrvD()
 {
-    switchDevice(11);
+     changeDevice(11);
 }
 
 

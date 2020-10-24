@@ -5,19 +5,20 @@
 #include "desktop.h"
 #include "desktop-res.h"
 #include "desktop-icons.h"
-
+#include "desktop-vectors.h"
 
 struct window winClockFrame = {0, 15, 221, SC_PIX_WIDTH-1};
 struct window winClockBackground = {1, 14, 222, SC_PIX_WIDTH-2};
 struct window winPadFrame = {19, 146, 8, 263};
 struct window winPadBackground = {20,145,9,262};
 unsigned char *mydate = "01/01/00  00:00 AM";
-void_func oldVector;
+
 struct filehandle *curFileHandle;
 unsigned numFiles = 0;
 unsigned numSelected = 0;
 unsigned kbytesUsed = 0;
 unsigned kbytesfree = 0;
+
 
 void main(void)
 {
@@ -25,29 +26,12 @@ void main(void)
     initIconTable();
     DoMenu(&mainMenu);
 
-    switchDevice(PEEK(0x8489));
+    changeDevice(PEEK(0x8489));
     
     hook_into_system();
     MainLoop();
 };
 
-void newVectorHandler(void) {
-        // update time
-        
-        
-        oldVector();
-}
-
-void hook_into_system(void) 
-{
-        oldVector = intTopVector;
-        intTopVector = newVectorHandler;
-}
-
-void remove_hook(void) 
-{
-        intTopVector = oldVector;
-}
 
 void initClock()
 {
@@ -66,7 +50,7 @@ void initClock()
 void drawPad()
 {
     
-    struct window pagingLine = {129,142,8,23};
+    struct window pagingLine = {127,142,8,23};
 
     // main frame
     InitDrawWindow(&winPadFrame);
@@ -90,13 +74,13 @@ void drawPad()
     HorizontalLine(255, 144, 8, 263);
 
     // page tab lines
-    HorizontalLine(255, 129, 8, 23);
-    VerticalLine(255,129, 142, 23);
+    HorizontalLine(255, 127, 8, 23);
+    VerticalLine(255,127, 142, 23);
     DrawLine(DRAW_DRAW, &pagingLine);
 
 }
 
-void switchDevice(unsigned char deviceNumber)
+void changeDevice(unsigned char deviceNumber)
 {
     char answer;
     drawPad();
@@ -140,7 +124,11 @@ void updateDirectory()
     unsigned char fnames[8][17];
 
     UseSystemFont();
-    curFileHandle = Get1stDirEntry();
+
+    if(curPage == 1)
+        curFileHandle = Get1stDirEntry();
+    else
+        curFileHandle = GetNxtDirEntry();
 
     do
     {
@@ -181,7 +169,7 @@ void updateDirectory()
         if(ctr < 4)
             PutString(fnames[ctr], 80, 40 + (ctr*50));
         else
-            PutString(fnames[ctr], 128, 40 + ((ctr-4)*50));  
+            PutString(fnames[ctr], 123, 40 + ((ctr-4)*50));  
     }
 }
 
@@ -206,24 +194,26 @@ void updatePadHeader()
     
     UseSystemFont();
 
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
     PutString(newDiskName, 27, 100);
-
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
+    
+    PutString(hdr1,39, 23);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);
-    PutString(hdr1,39, 26);
     
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 54);
     PutString(hdr2,39, 68);
-
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesUsed,  39, 118);
-    PutString(hdr3,39, 128);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
     
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 195);
+    PutString(hdr3,39, 123);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesUsed,  39, 118);
+    
     PutString(hdr4,39, 206);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 200);
+    
 }
 
-
+#include "desktop-vectors.c"
 #include "desktop-menu.c"
 #include "desktop-icons.c"
+
 
 

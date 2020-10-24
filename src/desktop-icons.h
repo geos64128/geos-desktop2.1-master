@@ -1,5 +1,5 @@
-#ifndef _desktop-icons_
-#define _desktop-icons_
+#ifndef _desktop_icons_
+#define _desktop_icons_
 
 #define DRIVE_A_TYPE  PEEK(0x848e)
 #define DRIVE_B_TYPE  PEEK(0x848f)
