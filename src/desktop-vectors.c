@@ -4,13 +4,13 @@ void hook_into_system(void) {
     oldOtherPressVector = otherPressVec;
     otherPressVec = newOtherPressVectorHandler;
 
-    oldIntTopVector = intTopVector;
-    intTopVector = newIntTopVectorHandler;
+    oldAppMain = appMain;
+    appMain = newAppMainHandler;
 }
 
 void remove_hook(void) {
     otherPressVec = oldOtherPressVector;
-    intTopVector = oldIntTopVector;
+    appMain = oldAppMain;
 }
 
 void newOtherPressVectorHandler(void) 
@@ -73,10 +73,15 @@ void newOtherPressVectorHandler(void)
 }
 
 
-void newIntTopVectorHandler(void) {
+void newAppMainHandler(void) {
         
-        // update time        
-        oldIntTopVector();
+        if(system_date.s_minutes != lastMinute)
+        {
+            updateClock();
+            lastMinute = system_date.s_minutes;
+        }
+                 
+        oldAppMain();
 }
 
 

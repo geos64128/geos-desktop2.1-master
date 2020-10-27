@@ -20,6 +20,7 @@ void drawPad();
 void updatePadHeader();
 void updateDirectory();
 void changeDevice(unsigned char deviceNumber);
+void updateClock();
 
 
 #endif

@@ -5,11 +5,13 @@
 #define mouseYPos PEEK(0x3C)
 
 void_func oldOtherPressVector;
-void_func oldIntTopVector;
+void_func oldAppMain;
+
+unsigned char lastMinute = 99;
 
 void hook_into_system(void);
 void remove_hook(void);
 void newOtherPressVectorHandler(void);
-void newIntTopVectorHandler(void);
+void newAppMainHandler(void);
 
 #endif

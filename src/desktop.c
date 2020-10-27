@@ -11,13 +11,13 @@ struct window winClockFrame = {0, 15, 221, SC_PIX_WIDTH-1};
 struct window winClockBackground = {1, 14, 222, SC_PIX_WIDTH-2};
 struct window winPadFrame = {19, 146, 8, 263};
 struct window winPadBackground = {20,145,9,262};
-unsigned char *mydate = "01/01/00  00:00 AM";
 
 struct filehandle *curFileHandle;
 unsigned numFiles = 0;
 unsigned numSelected = 0;
 unsigned kbytesUsed = 0;
 unsigned kbytesfree = 0;
+unsigned char datetime[19];
 
 
 void main(void)
@@ -37,14 +37,84 @@ void initClock()
 {
     InitDrawWindow(&winClockFrame);
     FrameRectangle(255);
+    updateClock();
+}
+
+void updateClock()
+{
+    unsigned char strMonth[3];
+    unsigned char strDay[3];
+    unsigned char strYear[3];
+    unsigned char strHour[3];
+    unsigned char strMinute[3];
+    unsigned char hr = 0;
 
     SetPattern(0);
     InitDrawWindow(&winClockBackground);
     Rectangle();
+    
+    hr = system_date.s_hour;
+    
+    if(hr > 11)
+    {
+       datetime[16] = 'P';
+       hr = 24-hr;
+    }
+    else
+        datetime[16] = 'A';
+
+    if(hr == 0) 
+        hr = 12;           
+    
+    itoa(system_date.s_month, (char *)strMonth, 10);
+    itoa(system_date.s_day, (char *)strDay, 10);
+    itoa(system_date.s_year, (char *)strYear, 10);
+    itoa(hr, (char *)strHour, 10);
+    itoa(system_date.s_minutes, (char *)strMinute, 10);
+
+    if(strMonth[1] == 0)
+    {
+        strMonth[1] = strMonth[0]; strMonth[0] = '0'; strMonth[2] = 0;
+    }
+    if(strDay[1] == 0)
+    {
+        strDay[1] = strDay[0]; strDay[0] = '0'; strDay[2] = 0;
+    }
+    if(strYear[1] == 0)
+    {
+        strYear[1] = strYear[0]; strYear[0] = '0'; strYear[2] = 0;
+    }
+    if(strHour[1] == 0)
+    {
+        strHour[1] = strHour[0]; strHour[0] = '0'; strHour[2] = 0;
+    }
+    if(strMinute[1] == 0)
+    {
+        strMinute[1] = strMinute[0]; strMinute[0] = '0'; strMinute[2] = 0;
+    }
+
+    datetime[0] = strMonth[0];
+    datetime[1] = strMonth[1];
+    datetime[2] = '/';
+    datetime[3] = strDay[0];
+    datetime[4] = strDay[1];
+    datetime[5] = '/';
+    datetime[6] = strYear[0];
+    datetime[7] = strYear[1];
+    datetime[8] = ' ';
+    datetime[9] = ' ';
+    datetime[10] = strHour[0];
+    datetime[11] = strHour[1];
+    datetime[12] = ':';
+    datetime[13] = strMinute[0];
+    datetime[14] = strMinute[1];
+    datetime[15] = ' ';
+
+    datetime[17] = 'M';
+    datetime[18] = 0;
 
     UseSystemFont();
-    PutString(mydate, 10, 225);
-    
+    PutString(datetime, 10, 225);
 }
 
 void drawPad()
