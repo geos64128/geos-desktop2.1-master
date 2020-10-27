@@ -104,6 +104,6 @@ HEADER APPLICATION "DESK TOP" "DESKtOP am" "V2.0"
 ;    date 88 08 19 13 35        ; always 5 fields!
 ;    dostype USR                ; can be:  PRG, SEQ, USR (only all UPPER- or lower-case)
 ;    structure SEQ              ; can be:  SEQ, VLIR (only UPPER- or lower-case)
-    mode any                ; can be:  any, 40only, 80only, c64only
+    mode c64only                ; can be:  any, 40only, 80only, c64only
 	icon "desktop.icon"
 }

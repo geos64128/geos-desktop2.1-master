@@ -1,4 +1,4 @@
-
+cls
 del /S/Q target
 rd target
 md target
