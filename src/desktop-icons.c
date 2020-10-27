@@ -5,7 +5,7 @@ void initIconTable()
     free(myicontab);
     myicontab = (struct icontab*)calloc(1, sizeof(struct icontab));
 
-    myicontab->number = 15;
+    myicontab->number = 7;
     myicontab->mousepos.x = 0;
     myicontab->mousepos.y = 0;
 
@@ -63,62 +63,53 @@ void initIconTable()
     myicontab->tab[6].proc_ptr = (unsigned)  iconHandler;
 
     // file icons
-    myicontab->tab[7].pic_ptr = 0;
-    myicontab->tab[7].x = 5; // * 8 
-    myicontab->tab[7].y = 50;
-    myicontab->tab[7].width = 3; // * 8 
-    myicontab->tab[7].heigth = 21;
-    myicontab->tab[7].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[0].pic_ptr = 0;
+    fileIcon[0].x = 5; // * 8 
+    fileIcon[0].y = 50;
+    fileIcon[0].width = 3; // * 8 
+    fileIcon[0].heigth = 21;
 
-    myicontab->tab[8].pic_ptr = 0;
-    myicontab->tab[8].x = 12; // * 8 
-    myicontab->tab[8].y = 50;
-    myicontab->tab[8].width = 3; // * 8 
-    myicontab->tab[8].heigth = 21;
-    myicontab->tab[8].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[1].pic_ptr = 0;
+    fileIcon[1].x = 12; // * 8 
+    fileIcon[1].y = 50;
+    fileIcon[1].width = 3; // * 8 
+    fileIcon[1].heigth = 21;
 
-    myicontab->tab[9].pic_ptr = 0;
-    myicontab->tab[9].x = 19; // * 8 
-    myicontab->tab[9].y = 50;
-    myicontab->tab[9].width = 3; // * 8 
-    myicontab->tab[9].heigth = 21;
-    myicontab->tab[9].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[2].pic_ptr = 0;
+    fileIcon[2].x = 19; // * 8 
+    fileIcon[2].y = 50;
+    fileIcon[2].width = 3; // * 8 
+    fileIcon[2].heigth = 21;
 
-    myicontab->tab[10].pic_ptr = 0;
-    myicontab->tab[10].x = 26; // * 8 
-    myicontab->tab[10].y = 50;
-    myicontab->tab[10].width = 3; // * 8 
-    myicontab->tab[10].heigth = 21;
-    myicontab->tab[10].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[3].pic_ptr = 0;
+    fileIcon[3].x = 26; // * 8 
+    fileIcon[3].y = 50;
+    fileIcon[3].width = 3; // * 8 
+    fileIcon[3].heigth = 21;
 //
-    myicontab->tab[11].pic_ptr = 0;
-    myicontab->tab[11].x = 5; // * 8 
-    myicontab->tab[11].y = 90;
-    myicontab->tab[11].width = 3; // * 8 
-    myicontab->tab[11].heigth = 21;
-    myicontab->tab[11].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[4].pic_ptr = 0;
+    fileIcon[4].x = 5; // * 8 
+    fileIcon[4].y = 90;
+    fileIcon[4].width = 3; // * 8 
+    fileIcon[4].heigth = 21;
 
-    myicontab->tab[12].pic_ptr = 0;
-    myicontab->tab[12].x = 12; // * 8 
-    myicontab->tab[12].y = 90;
-    myicontab->tab[12].width = 3; // * 8 
-    myicontab->tab[12].heigth = 21;
-    myicontab->tab[12].proc_ptr = (unsigned)  iconHandler;
+    fileIcon[5].pic_ptr = 0;
+    fileIcon[5].x = 12; // * 8 
+    fileIcon[5].y = 90;
+    fileIcon[5].width = 3; // * 8 
+    fileIcon[5].heigth = 21;
+ 
+    fileIcon[6].pic_ptr = 0;
+    fileIcon[6].x = 19; // * 8 
+    fileIcon[6].y = 90;
+    fileIcon[6].width = 3; // * 8 
+    fileIcon[6].heigth = 21;
 
-    myicontab->tab[13].pic_ptr = 0;
-    myicontab->tab[13].x = 19; // * 8 
-    myicontab->tab[13].y = 90;
-    myicontab->tab[13].width = 3; // * 8 
-    myicontab->tab[13].heigth = 21;
-    myicontab->tab[13].proc_ptr = (unsigned)  iconHandler;
-
-    myicontab->tab[14].pic_ptr = 0;
-    myicontab->tab[14].x = 26; // * 8 
-    myicontab->tab[14].y = 90;
-    myicontab->tab[14].width = 3; // * 8 
-    myicontab->tab[14].heigth = 21;
-    myicontab->tab[14].proc_ptr = (unsigned)  iconHandler;
-
+    fileIcon[7].pic_ptr = 0;
+    fileIcon[7].x = 26; // * 8 
+    fileIcon[7].y = 90;
+    fileIcon[7].width = 3; // * 8 
+    fileIcon[7].heigth = 21;
 }
 
 char *getDriveIcon(unsigned char id)
@@ -155,7 +146,8 @@ void updateDriveIcons()
 
 void updateFileIcon(unsigned char iconnumber, char *icon_pic)
 {
-    myicontab->tab[7+iconnumber].pic_ptr = icon_pic;
+    fileIcon[iconnumber].pic_ptr = icon_pic;
+    BitmapUp(&fileIcon[iconnumber]);
 }
 
 void iconHandler() 

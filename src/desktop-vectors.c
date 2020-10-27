@@ -1,19 +1,19 @@
 #include "desktop-vectors.h"
 
 void hook_into_system(void) {
-    oldMouseVector = mouseVector;
-    mouseVector = newMouseVectorHandler;
+    oldOtherPressVector = otherPressVec;
+    otherPressVec = newOtherPressVectorHandler;
 
     oldIntTopVector = intTopVector;
     intTopVector = newIntTopVectorHandler;
 }
 
 void remove_hook(void) {
-    mouseVector = oldMouseVector;
+    otherPressVec = oldOtherPressVector;
     intTopVector = oldIntTopVector;
 }
 
-void newMouseVectorHandler(void) 
+void newOtherPressVectorHandler(void) 
 {
     unsigned char pgNext = 0;
     unsigned char pgPrev = 0;
@@ -22,6 +22,7 @@ void newMouseVectorHandler(void)
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseYPos,  190, 160);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseXPos,  190, 190);
 
+    // if mouse down, check to see if pointing at the next or prev pager
     if(mouseData < 128)
     {
         for(tmp=0; tmp < 14; tmp++)
@@ -30,20 +31,27 @@ void newMouseVectorHandler(void)
             {
                 if((mouseYPos == (127 + tmp)) && ((mouseXPos > (8+tmp)) && (mouseXPos < 24))) { 
                     pgNext = 1;
+                    break;
+                };
+                
+                if((mouseYPos == 127 + tmp) && (mouseXPos > 8 && mouseXPos < (10 + tmp))) { 
+                    pgPrev = 1;
+                    break;
                 };
             }
         }
+
+        if (pgNext == 1)
+            PutString("pgNext", 190, 240);
+
+        if (pgPrev == 1)
+            PutString("pgPrev", 190, 240);
+
+        if (pgNext == 0 && pgPrev == 0)
+            PutString("no click", 190, 240);
     }
 
-    if (pgNext == 1)
-    {
-        changeDevice(CUR_DEVICE);
-        
-        StartMouseMode();
-        mouseVector = newMouseVectorHandler;
-    }
-
-    oldMouseVector();
+    oldOtherPressVector();
 }
 
 
