@@ -63,53 +63,53 @@ void initIconTable()
     myicontab->tab[6].proc_ptr = (unsigned)  iconHandler;
 
     // file icons
-    fileIcon[0].pic_ptr = 0;
-    fileIcon[0].x = 5; // * 8 
-    fileIcon[0].y = 50;
-    fileIcon[0].width = 3; // * 8 
-    fileIcon[0].heigth = 21;
+    fileIcons[0].pic_ptr = 0;
+    fileIcons[0].x = 5; // * 8 
+    fileIcons[0].y = 50;
+    fileIcons[0].width = 3; // * 8 
+    fileIcons[0].heigth = 21;
 
-    fileIcon[1].pic_ptr = 0;
-    fileIcon[1].x = 12; // * 8 
-    fileIcon[1].y = 50;
-    fileIcon[1].width = 3; // * 8 
-    fileIcon[1].heigth = 21;
+    fileIcons[1].pic_ptr = 0;
+    fileIcons[1].x = 12; // * 8 
+    fileIcons[1].y = 50;
+    fileIcons[1].width = 3; // * 8 
+    fileIcons[1].heigth = 21;
 
-    fileIcon[2].pic_ptr = 0;
-    fileIcon[2].x = 19; // * 8 
-    fileIcon[2].y = 50;
-    fileIcon[2].width = 3; // * 8 
-    fileIcon[2].heigth = 21;
+    fileIcons[2].pic_ptr = 0;
+    fileIcons[2].x = 19; // * 8 
+    fileIcons[2].y = 50;
+    fileIcons[2].width = 3; // * 8 
+    fileIcons[2].heigth = 21;
 
-    fileIcon[3].pic_ptr = 0;
-    fileIcon[3].x = 26; // * 8 
-    fileIcon[3].y = 50;
-    fileIcon[3].width = 3; // * 8 
-    fileIcon[3].heigth = 21;
+    fileIcons[3].pic_ptr = 0;
+    fileIcons[3].x = 26; // * 8 
+    fileIcons[3].y = 50;
+    fileIcons[3].width = 3; // * 8 
+    fileIcons[3].heigth = 21;
 //
-    fileIcon[4].pic_ptr = 0;
-    fileIcon[4].x = 5; // * 8 
-    fileIcon[4].y = 90;
-    fileIcon[4].width = 3; // * 8 
-    fileIcon[4].heigth = 21;
+    fileIcons[4].pic_ptr = 0;
+    fileIcons[4].x = 5; // * 8 
+    fileIcons[4].y = 90;
+    fileIcons[4].width = 3; // * 8 
+    fileIcons[4].heigth = 21;
 
-    fileIcon[5].pic_ptr = 0;
-    fileIcon[5].x = 12; // * 8 
-    fileIcon[5].y = 90;
-    fileIcon[5].width = 3; // * 8 
-    fileIcon[5].heigth = 21;
+    fileIcons[5].pic_ptr = 0;
+    fileIcons[5].x = 12; // * 8 
+    fileIcons[5].y = 90;
+    fileIcons[5].width = 3; // * 8 
+    fileIcons[5].heigth = 21;
  
-    fileIcon[6].pic_ptr = 0;
-    fileIcon[6].x = 19; // * 8 
-    fileIcon[6].y = 90;
-    fileIcon[6].width = 3; // * 8 
-    fileIcon[6].heigth = 21;
+    fileIcons[6].pic_ptr = 0;
+    fileIcons[6].x = 19; // * 8 
+    fileIcons[6].y = 90;
+    fileIcons[6].width = 3; // * 8 
+    fileIcons[6].heigth = 21;
 
-    fileIcon[7].pic_ptr = 0;
-    fileIcon[7].x = 26; // * 8 
-    fileIcon[7].y = 90;
-    fileIcon[7].width = 3; // * 8 
-    fileIcon[7].heigth = 21;
+    fileIcons[7].pic_ptr = 0;
+    fileIcons[7].x = 26; // * 8 
+    fileIcons[7].y = 90;
+    fileIcons[7].width = 3; // * 8 
+    fileIcons[7].heigth = 21;
 }
 
 char *getDriveIcon(unsigned char id)
@@ -146,8 +146,12 @@ void updateDriveIcons()
 
 void updateFileIcon(unsigned char iconnumber, char *icon_pic)
 {
-    fileIcon[iconnumber].pic_ptr = icon_pic;
-    BitmapUp(&fileIcon[iconnumber]);
+    fileIcons[iconnumber].pic_ptr = icon_pic;
+    fileIconWindows[iconnumber].top   = fileIcons[iconnumber].y;
+    fileIconWindows[iconnumber].bot   = (fileIcons[iconnumber].y + fileIcons[iconnumber].heigth) - 1;
+    fileIconWindows[iconnumber].left  = fileIcons[iconnumber].x*8;
+    fileIconWindows[iconnumber].right = (fileIcons[iconnumber].x*8 + fileIcons[iconnumber].width*8) - 1;
+    BitmapUp(&fileIcons[iconnumber]);
 }
 
 void iconHandler() 

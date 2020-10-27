@@ -139,9 +139,9 @@ void updateDirectory()
         
             if(GetFHdrInfo(curFileHandle) == 0) 
             {
-                //copy icon data
+                //copy icon image data
                 for(z=0; z < 63; z++)
-                    fileIcons[ctr][z+1] = fileHeader.icon_pic[z];
+                    fileIconImages[ctr][z+1] = fileHeader.icon_pic[z];
 
                 // copy and clean up filename
                 for(z=0; z<17; z++)
@@ -164,7 +164,7 @@ void updateDirectory()
     // Display icons and filenames
     for(ctr=0; ctr<8;ctr++)
     {
-        updateFileIcon(ctr, fileIcons[ctr]);
+        updateFileIcon(ctr, fileIconImages[ctr]);
 
         if(ctr < 4)
             PutString(fnames[ctr], 80, 40 + (ctr*50));
@@ -211,9 +211,10 @@ void updatePadHeader()
     
 }
 
+#include "desktop-icons.c"
 #include "desktop-vectors.c"
 #include "desktop-menu.c"
-#include "desktop-icons.c"
+
 
 
 
