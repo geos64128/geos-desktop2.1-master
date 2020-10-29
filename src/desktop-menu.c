@@ -1,3 +1,8 @@
+#define GotoFirstMenu()
+#include <geos/gdlgbox.h>
+#include <geos/gsys.h>
+#include "desktop.h"
+#include "desktop-vectors.h"
 
 void mnu_geos_geosInfo (void)
 {

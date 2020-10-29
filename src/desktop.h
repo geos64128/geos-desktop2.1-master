@@ -8,12 +8,12 @@
 #define DRIVE_C_TYPE  PEEK(0x8490)
 #define DRIVE_D_TYPE  PEEK(0x8491)
 
-char *hdr1 = " files,";
-char *hdr2 = " selected";
-char *hdr3 = " Kbytes used";
-char *hdr4 = " Kbytes free";
+extern char *hdr1;
+extern char *hdr2;
+extern char *hdr3;
+extern char *hdr4;
 
-unsigned char curPage = 1;
+extern unsigned char curPage;
 
 void initClock();
 void drawPad();
