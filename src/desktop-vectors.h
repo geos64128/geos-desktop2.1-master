@@ -8,6 +8,7 @@ void_func oldOtherPressVector;
 void_func oldAppMain;
 
 unsigned char lastMinute = 99;
+unsigned char mousereleased = 0;
 
 void hook_into_system(void);
 void remove_hook(void);

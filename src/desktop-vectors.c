@@ -22,10 +22,11 @@ void newOtherPressVectorHandler(void)
 
     //PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseXPos,  190, 160);
     //PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseYPos,  190, 190);
+//PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseData,  190, 64);
 
     // if mouse down, check region
-    if(mouseData < 128)
-    {    
+    if(mouseData == 0)
+    {
         // file icon selected?
         for(tmp=0; tmp<8;tmp++)
         {
@@ -38,6 +39,33 @@ void newOtherPressVectorHandler(void)
                 numSelected++;
                 PutString("  ", 39,64);
                 PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+
+                // check for double click
+                // $8515 counts down from the applied value to zero every interrupt
+                dblClickCount = 30; //POKE(0x8515, 30);
+                while (dblClickCount != 0) //(PEEK(0x8515) != 0)
+                {
+                    if(mouseData == 128)
+                    {
+                        while (dblClickCount != 0) //(PEEK(0x8515) != 0)
+                        {
+                            if(mouseData == 0)
+                            {
+                                numSelected = 0;
+                                PutString("  ", 39,64);
+                                PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+
+                                InitDrawWindow(&fileIconWindows[tmp]);
+                                InvertRectangle();
+
+                                DlgBoxOk("Run program", "test of dbl click");
+                            }
+                                
+                        }
+
+                    }
+                       
+                }
             }
         }   
         
