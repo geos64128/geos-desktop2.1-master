@@ -144,6 +144,29 @@ void updateDriveIcons()
     myicontab->tab[3].pic_ptr = getDriveIcon(DRIVE_D_TYPE);
 }
 
+void clearAllFileIcons()
+{
+    unsigned char idx = 0;
+    unsigned char tmp = 0;
+
+    drawWindow.top = 50;
+    drawWindow.left = 24;
+    drawWindow.bot = 140;
+    drawWindow.right = 260;
+
+    SetPattern(0);
+    Rectangle();
+
+    for(idx=0; idx<8;idx++)
+    {
+        for(tmp=0;tmp<63;tmp++)
+            fileIconImages[idx][tmp+1] = 0;
+
+        //updateFileIcon(idx, fileIconImages[idx]);
+    }        
+
+}
+
 void updateFileIcon(unsigned char iconnumber, char *icon_pic)
 {
     fileIcons[iconnumber].pic_ptr = icon_pic;

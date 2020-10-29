@@ -20,8 +20,8 @@ void newOtherPressVectorHandler(void)
     unsigned char tmp = 0;
     unsigned char selectedIcon = 99;
 
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseXPos,  190, 160);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseYPos,  190, 190);
+    //PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseXPos,  190, 160);
+    //PutDecimal(SET_LEFTJUST + SET_SURPRESS, mouseYPos,  190, 190);
 
     // if mouse down, check region
     if(mouseData < 128)
@@ -33,8 +33,11 @@ void newOtherPressVectorHandler(void)
             {
                 InitDrawWindow(&fileIconWindows[tmp]);
                 InvertRectangle();
-                PutString("icon", 190, 80);
+
                 selectedIcon = tmp;
+                numSelected++;
+                PutString("  ", 39,64);
+                PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
             }
         }   
         
@@ -60,13 +63,25 @@ void newOtherPressVectorHandler(void)
         }
 
         if (pgNext == 1)
-            PutString("pgNext", 190, 240);
+        {
+            //PutString("pgNext", 197, 240);
+            clearAllFileIcons();
+            curPage++;
+            updateDirectory();
+        }
+            
 
         if (pgPrev == 1)
-            PutString("pgPrev", 190, 240);
+        {
+            //PutString("pgPrev", 197, 240);
+            clearAllFileIcons();
+            curPage--;
+            updateDirectory();
+        }
+            
 
-        if (pgNext == 0 && pgPrev == 0)
-            PutString("no click", 190, 240);
+        //if (pgNext == 0 && pgPrev == 0)
+        //    PutString("no click", 190, 240);
     }
 
     oldOtherPressVector();

@@ -201,12 +201,12 @@ void updateDirectory()
         curFileHandle = GetNxtDirEntry();
 
     do
-    {
-        if (curFileHandle->dostype != 0x00 && curFileHandle->dostype != 0x20); 
-        {
+    {       
+        if (curFileHandle->dostype != 0)
+        {     
+            //PutDecimal(SET_LEFTJUST + SET_SURPRESS, curFileHandle->dostype,  190, 10 + (20*ctr));
             // r5 (curFileHandle) is trashed by DoIcons and PutString
-            tmp = r5;   
-        
+            tmp = r5;
             if(GetFHdrInfo(curFileHandle) == 0) 
             {
                 //copy icon image data
@@ -220,27 +220,47 @@ void updateDirectory()
                         break;
                     fnames[ctr][z] = curFileHandle->name[z];
                 };
-                fnames[ctr][z] = 0;             
+                fnames[ctr][z] = 0;
+                ctr++;              
             }
+            r5 = tmp;   
+        }
+
+        // empty icon space
+        if(curFileHandle->dostype == 0 && curFileHandle->name[0] == 0)
+        {
+            for(z=0; z < 63; z++)
+                fileIconImages[ctr][z+1] = 0;
             
-            r5 = tmp;
-            curFileHandle = GetNxtDirEntry();
+            fnames[ctr][0] = 0;
+            ctr++;  
         }
         
-        ctr++;
-
+        if(ctr < 8)
+            curFileHandle = GetNxtDirEntry();
+        
     } while (ctr < 8);
 
     // Display icons and filenames
-    for(ctr=0; ctr<8;ctr++)
+    // Desktop prints these in reverse order
+    tmp = (ctr == 8 ? 7 : ctr);
+    do
     {
-        updateFileIcon(ctr, fileIconImages[ctr]);
+        updateFileIcon(tmp, fileIconImages[tmp]);
 
-        if(ctr < 4)
-            PutString(fnames[ctr], 80, 40 + (ctr*50));
+        if(tmp < 4)
+            PutString(fnames[tmp], 80, 40 + (tmp*50));
         else
-            PutString(fnames[ctr], 123, 40 + ((ctr-4)*50));  
-    }
+            PutString(fnames[tmp], 123, 40 + ((tmp-4)*50));  
+        
+        if(tmp == 0)
+            break;
+
+        tmp--;
+
+    } while(TRUE);
+
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
 }
 
 void updatePadHeader()
@@ -262,11 +282,12 @@ void updatePadHeader()
     GetDirHead();
     blksfree = CalcBlksFree();
     
+    numFiles = getFileCount();
+
     UseSystemFont();
 
     PutString(newDiskName, 27, 100);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
-    
+        
     PutString(hdr1,39, 23);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);
     
@@ -279,6 +300,27 @@ void updatePadHeader()
     PutString(hdr4,39, 206);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 200);
     
+}
+
+unsigned getFileCount()
+{
+    unsigned ctr = 0;
+    unsigned char eof = 0;
+
+    curFileHandle = Get1stDirEntry();
+
+    do
+    {       
+        if (curFileHandle->dostype != 0)
+            ctr++;              
+        
+        curFileHandle = GetNxtDirEntry();
+        asm("sty $02");
+        eof = PEEK(2);
+        
+    } while (eof == 0);
+
+    return ctr;
 }
 
 #include "desktop-icons.c"

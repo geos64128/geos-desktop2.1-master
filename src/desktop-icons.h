@@ -60,6 +60,7 @@ void initIconTable();
 char *getDriveIcon(unsigned char id);
 void updateDriveIcons();
 void updateFileIcon(unsigned char iconnumber, char *icon_pic);
+void clearAllFileIcons();
 void iconHandler();
 void iconHandlerDrvA();
 void iconHandlerDrvB();
