@@ -85,10 +85,8 @@ void newOtherPressVectorHandler(void)
                                     PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
 
                                     unselectAllFileIcons();
-                                    //InitDrawWindow(&fileIconWindows[tmp]);
-                                    //InvertRectangle();
-
-                                    DlgBoxOk("Run program", "test of dbl click");
+                                    
+                                    GetFile(0,fileIconNames[tmp],0,0,0);
                                 }
                                     
                             }
