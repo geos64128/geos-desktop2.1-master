@@ -191,8 +191,7 @@ void updateDirectory()
     unsigned char z = 0;
     unsigned char ctr = 0;
     unsigned tmp = 0;
-    unsigned char fnames[8][17];
-
+    
     UseSystemFont();
 
     if(curPage == 1)
@@ -218,9 +217,9 @@ void updateDirectory()
                 {
                     if(curFileHandle->name[z] == 0xa0)
                         break;
-                    fnames[ctr][z] = curFileHandle->name[z];
+                    fileIconNames[ctr][z] = curFileHandle->name[z];
                 };
-                fnames[ctr][z] = 0;
+                fileIconNames[ctr][z] = 0;
                 ctr++;              
             }
             r5 = tmp;   
@@ -232,7 +231,7 @@ void updateDirectory()
             for(z=0; z < 63; z++)
                 fileIconImages[ctr][z+1] = 0;
             
-            fnames[ctr][0] = 0;
+            fileIconNames[ctr][0] = 0;
             ctr++;  
         }
         
@@ -249,9 +248,9 @@ void updateDirectory()
         updateFileIcon(tmp, fileIconImages[tmp]);
 
         if(tmp < 4)
-            PutString(fnames[tmp], 80, 40 + (tmp*50));
+            PutString(fileIconNames[tmp], 80, 40 + (tmp*50));
         else
-            PutString(fnames[tmp], 123, 40 + ((tmp-4)*50));  
+            PutString(fileIconNames[tmp], 123, 40 + ((tmp-4)*50));  
         
         if(tmp == 0)
             break;
@@ -268,6 +267,7 @@ void updatePadHeader()
     char *diskName = (char *)(0x841e);
     char newDiskName[17];
     unsigned blksfree = 0;
+    unsigned long tmp = 0;
     unsigned char z;
     
     // copy and clean up diskname
@@ -280,8 +280,12 @@ void updatePadHeader()
     newDiskName[z] = 0; 
 
     GetDirHead();
+
+    r5 = 0x8200;
     blksfree = CalcBlksFree();
-    
+    tmp = blksfree * 256;
+    kbytesfree = tmp/256;
+
     numFiles = getFileCount();
 
     UseSystemFont();

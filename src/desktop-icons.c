@@ -177,6 +177,51 @@ void updateFileIcon(unsigned char iconnumber, char *icon_pic)
     BitmapUp(&fileIcons[iconnumber]);
 }
 
+void selectFileIcon(unsigned char iconnumber)
+{
+    // reverse the icon image
+    InitDrawWindow(&fileIconWindows[iconnumber]);
+    InvertRectangle();
+
+    fileIconSelected[iconnumber] = 1;
+}
+
+void unselectFileIcon(unsigned char iconnumber)
+{
+    // reverse the icon image
+    InitDrawWindow(&fileIconWindows[iconnumber]);
+    InvertRectangle();
+
+    fileIconSelected[iconnumber] = 0;
+}
+
+void unselectAllFileIcons()
+{
+    unsigned char tmp = 0;
+
+    //unselect all
+    for(tmp=0; tmp<8;tmp++)
+    {
+        if(fileIconSelected[tmp] == 1)
+            unselectFileIcon(tmp);
+    }
+}
+
+void unselectAllFileIconsExcept(unsigned char iconnumber)
+{
+    unsigned char tmp = 0;
+
+    //unselect others
+    for(tmp=0; tmp<8;tmp++)
+    {
+        if(tmp != iconnumber && fileIconSelected[tmp] == 1)
+        {
+            unselectFileIcon(tmp);
+            break;
+        }
+    }
+}
+
 void iconHandler() 
 {
     remove_hook();
