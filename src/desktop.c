@@ -6,6 +6,7 @@
 #include "desktop-res.h"
 #include "desktop-icons.h"
 #include "desktop-vectors.h"
+#include "desktop-bsd6pt.h"
 
 struct window winClockFrame = {0, 15, 221, SC_PIX_WIDTH-1};
 struct window winClockBackground = {1, 14, 222, SC_PIX_WIDTH-2};
@@ -19,7 +20,6 @@ unsigned kbytesUsed = 0;
 unsigned kbytesfree = 0;
 unsigned char datetime[19];
 
-
 void main(void)
 {
     initClock();
@@ -31,7 +31,6 @@ void main(void)
     hook_into_system();
     MainLoop();
 };
-
 
 void initClock()
 {
@@ -257,15 +256,18 @@ void updateDirectory()
 
     // Display icons and filenames
     // Desktop prints these in reverse order
+
+    LoadCharSet ((struct fontdesc *)(bsd_small));
+    
     tmp = (ctr == 8 ? 7 : ctr);
     do
     {
         updateFileIcon(tmp, fileIconImages[tmp]);
 
         if(tmp < 4)
-            PutString(fileIconNames[tmp], 80, 40 + (tmp*50));
+            PutString(fileIconNames[tmp], 76, 40 + (tmp*50));
         else
-            PutString(fileIconNames[tmp], 123, 40 + ((tmp-4)*50));  
+            PutString(fileIconNames[tmp], 115, 40 + ((tmp-4)*50));  
         
         if(tmp == 0)
             break;
@@ -273,6 +275,8 @@ void updateDirectory()
         tmp--;
 
     } while(TRUE);
+    
+    UseSystemFont();
 
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
 }

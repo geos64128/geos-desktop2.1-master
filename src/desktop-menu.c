@@ -23,7 +23,7 @@ void mnu_geos_selectInput (void)
 
 void mnu_file_open (void)
 {
-    GotoFirstMenu();
+     GotoFirstMenu();
 };
 
 void mnu_file_duplicate (void)
