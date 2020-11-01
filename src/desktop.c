@@ -265,9 +265,9 @@ void updateDirectory()
         updateFileIcon(tmp, fileIconImages[tmp]);
 
         if(tmp < 4)
-            PutString(fileIconNames[tmp], 76, 40 + (tmp*50));
+            PutString(fileIconNames[tmp], 74, 40 + (tmp*50));
         else
-            PutString(fileIconNames[tmp], 115, 40 + ((tmp-4)*50));  
+            PutString(fileIconNames[tmp], 114, 40 + ((tmp-4)*50));  
         
         if(tmp == 0)
             break;
@@ -311,7 +311,7 @@ void updatePadHeader()
 
     PutString(newDiskName, 27, 100);
         
-    PutString(hdr1,39, 23);
+    PutString(hdr1,39, 27);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);
     
     PutString(hdr2,39, 68);
