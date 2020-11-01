@@ -86,7 +86,20 @@ void newOtherPressVectorHandler(void)
 
                                     unselectAllFileIcons();
                                     
-                                    GetFile(0,fileIconNames[tmp],0,0,0);
+                                    FindFile(fileIconNames[tmp]);
+                                    loadFileHandle = &dirEntryBuf;
+
+                                    if(loadFileHandle->type == DESK_ACC || loadFileHandle->type == APPLICATION
+                                    || loadFileHandle->type == AUTO_EXEC)
+                                    {
+                                        GetFile(0,fileIconNames[tmp],0,0,0);
+                                    }
+                                    else
+                                    {
+                                        DlgBoxOk("This file can't be opened", "by the deskTop.");
+                                    }
+                                    
+                                    
                                 }
                                     
                             }
