@@ -60,7 +60,7 @@ void initIconTable()
     myicontab->tab[6].y = 20;
     myicontab->tab[6].width = 2; // * 8 
     myicontab->tab[6].heigth = 11;
-    myicontab->tab[6].proc_ptr = (unsigned)  iconHandler;
+    myicontab->tab[6].proc_ptr = (unsigned)  iconCloseDiskHandler;
 
     // file icons
     fileIcons[0].pic_ptr = 0;
@@ -226,6 +226,12 @@ void iconHandler()
 {
     remove_hook();
     ToBASIC();
+}
+
+void iconCloseDiskHandler()
+{
+    drawPad();
+    drawFooter(0);
 }
 
 void iconHandlerDrvA()

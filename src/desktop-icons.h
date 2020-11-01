@@ -68,6 +68,7 @@ void unselectFileIcon(unsigned char iconnumber);
 void unselectAllFileIcons();
 void unselectAllFileIconsExcept(unsigned char iconnumber);
 void iconHandler();
+void iconCloseDiskHandler();
 void iconHandlerDrvA();
 void iconHandlerDrvB();
 void iconHandlerDrvC();

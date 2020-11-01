@@ -17,6 +17,7 @@ unsigned char curPage = 1;
 
 void initClock();
 void drawPad();
+void drawFooter(unsigned char showPagingTabs);
 void updatePadHeader();
 void updateDirectory();
 void changeDevice(unsigned char deviceNumber);

@@ -120,8 +120,6 @@ void updateClock()
 void drawPad()
 {
     
-    struct window pagingLine = {127,142,8,23};
-
     // main frame
     InitDrawWindow(&winPadFrame);
     FrameRectangle(255);
@@ -139,21 +137,36 @@ void drawPad()
     HorizontalLine(255, 31, 8, 263);
     
     HorizontalLine(255, 42, 8, 263);
+}
+
+void drawFooter(unsigned char showPagingTabs)
+{
+    struct window pagingLine = {127,142,8,23};
     
-    HorizontalLine(255, 142, 23, 263);
+    InitDrawWindow(&winPadBackground);
+
+    if (showPagingTabs == 1)
+    {
+        HorizontalLine(255, 142, 23, 263);     
+        
+        // page tab lines
+        HorizontalLine(255, 127, 8, 23);
+        VerticalLine(255,127, 142, 23);
+        DrawLine(DRAW_DRAW, &pagingLine);        
+    }
+    else
+    {
+        HorizontalLine(255, 142, 8, 263);
+    }
+    
     HorizontalLine(255, 144, 8, 263);
-
-    // page tab lines
-    HorizontalLine(255, 127, 8, 23);
-    VerticalLine(255,127, 142, 23);
-    DrawLine(DRAW_DRAW, &pagingLine);
-
 }
 
 void changeDevice(unsigned char deviceNumber)
 {
     char answer;
     drawPad();
+    drawFooter(1);
 
     SetDevice(deviceNumber);
     OpenDisk();
@@ -169,6 +182,8 @@ void changeDevice(unsigned char deviceNumber)
         else
         {
             DlgBoxOk("Hang on...", "Code not yet implemented");
+            drawPad();
+            drawFooter(0);
             return;
         }
     }
