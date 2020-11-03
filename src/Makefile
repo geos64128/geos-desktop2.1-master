@@ -10,6 +10,7 @@ LDFLAGS= -t geos-cbm
 
 desktop.cvt: $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJS)
+	mv *.cvt ../target
 
 desktop-res.h: desktop-res.grc
 
@@ -21,11 +22,6 @@ desktop-vectors.o: desktop-vectors.c desktop-vectors.h
 desktop-menu.o: desktop-menu.c
 
 desktop-icons.o: desktop-icons.c desktop-icons.h
-
-desktop.d64: desktop.cvt
-	c1541 -format "desktop,sh" d64 $@
-	c1541 -attach $@ -write desktop.cvt $?
-
 
 clean:
 	$(RM) $(OBJS)

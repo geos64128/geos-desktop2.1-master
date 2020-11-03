@@ -11,14 +11,10 @@ extern struct icontab *myicontab;
 extern struct iconpic fileIcons[8];
 extern struct window fileIconWindows[8];
 
-extern char drvIcon1541[];
-extern char drvIcon1571[];
-extern char drvIcon1581[];
-extern char drvIconREU[];
-extern char trashIcon[];
-extern char printerIcon[];
-extern char closeIcon[];
+extern unsigned char fileIconNames[8][17];
 extern char fileIconImages[][64];
+extern unsigned char fileIconSelected[8];
+
 
 void initIconTable();
 char *getDriveIcon(unsigned char id);

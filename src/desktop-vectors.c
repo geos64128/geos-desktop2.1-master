@@ -1,6 +1,8 @@
+#include <geos.h>
 #include "desktop-vectors.h"
 
 unsigned char lastMinute = 99;
+struct filehandle *loadFileHandle;
 
 void_func oldOtherPressVector;
 void_func oldAppMain;

@@ -8,11 +8,6 @@
 #define DRIVE_C_TYPE  PEEK(0x8490)
 #define DRIVE_D_TYPE  PEEK(0x8491)
 
-extern char *hdr1;
-extern char *hdr2;
-extern char *hdr3;
-extern char *hdr4;
-
 extern unsigned char curPage;
 
 void initClock();

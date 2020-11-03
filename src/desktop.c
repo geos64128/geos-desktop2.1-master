@@ -14,6 +14,7 @@ struct window winPadFrame = {19, 146, 8, 263};
 struct window winPadBackground = {20,145,9,262};
 
 struct filehandle *curFileHandle;
+
 unsigned numFiles = 0;
 unsigned numSelected = 0;
 unsigned kbytesUsed = 0;

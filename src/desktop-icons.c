@@ -11,6 +11,8 @@
 struct icontab *myicontab;
 struct iconpic fileIcons[8];
 struct window fileIconWindows[8];
+unsigned char fileIconNames[8][17];
+unsigned char fileIconSelected[8];
 
 char drvIcon1541[] = {192,0,0,0,63,255,252,64,0,2,95,255,250,
 95,255,250,64,0,2,71,255,194,71,255,194,71,255,194,68,0,66,
