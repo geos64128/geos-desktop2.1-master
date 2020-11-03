@@ -7,13 +7,13 @@
 void mnu_geos_geosInfo (void)
 {
     GotoFirstMenu();
-
-    DlgBoxOk("DESKTOP v2.1", "Written By Scott Hutter - 2020");
+    DlgBoxOk("GEOS Kernal designed by:", "Copyright 1986, 1988, Berkeley Softworks");
 };
 
 void mnu_geos_desktopInfo (void)
 {
     GotoFirstMenu();
+    DlgBoxOk("DESKTOP v2.1", "Written By Scott Hutter - 2020");
 };
 
 void mnu_geos_selectPrinter (void)
@@ -28,7 +28,7 @@ void mnu_geos_selectInput (void)
 
 void mnu_file_open (void)
 {
-    GotoFirstMenu();
+     GotoFirstMenu();
 };
 
 void mnu_file_duplicate (void)
