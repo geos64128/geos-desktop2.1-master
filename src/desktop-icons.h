@@ -13,8 +13,6 @@ extern struct window fileIconWindows[8];
 
 extern unsigned char fileIconNames[8][17];
 extern char fileIconImages[][64];
-extern unsigned char fileIconSelected[8];
-
 
 void initIconTable();
 char *getDriveIcon(unsigned char id);
