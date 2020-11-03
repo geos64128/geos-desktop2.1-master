@@ -1,5 +1,10 @@
 #include "desktop-vectors.h"
 
+unsigned char lastMinute = 99;
+
+void_func oldOtherPressVector;
+void_func oldAppMain;
+
 void hook_into_system(void) {
     oldOtherPressVector = otherPressVec;
     otherPressVec = newOtherPressVectorHandler;

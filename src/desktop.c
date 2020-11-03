@@ -19,6 +19,12 @@ unsigned numSelected = 0;
 unsigned kbytesUsed = 0;
 unsigned kbytesfree = 0;
 unsigned char datetime[19];
+unsigned char curPage = 1;
+
+char *hdr1 = " files,";
+char *hdr2 = " selected";
+char *hdr3 = " Kbytes used";
+char *hdr4 = " Kbytes free";
 
 void main(void)
 {
@@ -346,9 +352,9 @@ unsigned getFileCount()
     return ctr;
 }
 
-#include "desktop-icons.c"
-#include "desktop-vectors.c"
-#include "desktop-menu.c"
+//#include "desktop-icons.c"
+//#include "desktop-vectors.c"
+//#include "desktop-menu.c"
 
 
 
