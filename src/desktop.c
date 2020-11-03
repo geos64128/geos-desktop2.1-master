@@ -6,7 +6,7 @@
 #include "desktop-res.h"
 #include "desktop-icons.h"
 #include "desktop-vectors.h"
-#include "desktop-bsd6pt.h"
+#include "desktop-bsw6pt.h"
 
 struct window winClockFrame = {0, 15, 221, SC_PIX_WIDTH-1};
 struct window winClockBackground = {1, 14, 222, SC_PIX_WIDTH-2};
