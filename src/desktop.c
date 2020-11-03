@@ -257,7 +257,7 @@ void updateDirectory()
     // Display icons and filenames
     // Desktop prints these in reverse order
 
-    LoadCharSet ((struct fontdesc *)(bsd_small));
+    LoadCharSet ((struct fontdesc *)(bsw_small));
     
     tmp = (ctr == 8 ? 7 : ctr);
     do
