@@ -14,18 +14,11 @@ struct window winPadFrame = {19, 146, 8, 263};
 struct window winPadBackground = {20,145,9,262};
 
 struct filehandle *curFileHandle;
-
 unsigned numFiles = 0;
 unsigned numSelected = 0;
 unsigned kbytesUsed = 0;
 unsigned kbytesfree = 0;
 unsigned char datetime[19];
-unsigned char curPage = 1;
-
-char *hdr1 = " files,";
-char *hdr2 = " selected";
-char *hdr3 = " Kbytes used";
-char *hdr4 = " Kbytes free";
 
 void main(void)
 {
@@ -171,11 +164,17 @@ void drawFooter(unsigned char showPagingTabs)
 void changeDevice(unsigned char deviceNumber)
 {
     char answer;
+    
+    
     drawPad();
     drawFooter(1);
 
     SetDevice(deviceNumber);
     OpenDisk();
+         
+    //GetPtrCurDkNm(currentDiskName);  this doesnt work
+    //replaced with...
+    updateDiskName();
     
     if(!isGEOS)
     {
@@ -207,11 +206,39 @@ void changeDevice(unsigned char deviceNumber)
 
 }
 
+void updateDiskName()
+{
+    unsigned char* driveName;
+    unsigned char z;
+
+    if (curDrive == 8)  driveName = (char *)DRIVE_A_NAME;
+    if (curDrive == 9)  driveName = (char *)DRIVE_B_NAME;
+    if (curDrive == 10) driveName = (char *)DRIVE_C_NAME;
+    if (curDrive == 11) driveName = (char *)DRIVE_D_NAME;
+
+    // add padding
+    currentDiskName[0] = ' ';
+
+    // copy and clean up diskname
+    for(z=1; z<19; z++)
+    {
+        if(driveName[z-1] == 0xa0)
+            break;
+        
+        currentDiskName[z] = driveName[z-1];
+    };
+
+    // add padding
+    currentDiskName[z++] = ' ';
+    currentDiskName[z] = 0;
+}
+
 void updateDirectory()
 {
     unsigned char z = 0;
     unsigned char ctr = 0;
     unsigned tmp = 0;
+    unsigned startPrint = 0;
     
     UseSystemFont();
 
@@ -271,10 +298,12 @@ void updateDirectory()
     {
         updateFileIcon(tmp, fileIconImages[tmp]);
 
+        startPrint = centerOver(  (fileIcons[tmp].x*8 +fileIcons[tmp].width*8) - (fileIcons[tmp].width*8/2), fileIconNames[tmp]);
+
         if(tmp < 4)
-            PutString(fileIconNames[tmp], 74, 40 + (tmp*50));
+            PutString(fileIconNames[tmp], 74, startPrint);               
         else
-            PutString(fileIconNames[tmp], 114, 40 + ((tmp-4)*50));  
+            PutString(fileIconNames[tmp], 114, startPrint);  
         
         if(tmp == 0)
             break;
@@ -290,22 +319,12 @@ void updateDirectory()
 
 void updatePadHeader()
 {
-    char *diskName = (char *)(0x841e);
-    char newDiskName[17];
     unsigned blksfree = 0;
     unsigned long tmp = 0;
     unsigned char z;
-    
-    // copy and clean up diskname
-    for(z=0; z<17; z++)
-    {
-        if(diskName[z] == 0xa0)
-            break;
-        newDiskName[z] = diskName[z];
-    };
-    newDiskName[z] = 0; 
+    unsigned startPrint = 0;
 
-    GetDirHead();
+    //GetDirHead();
 
     r5 = 0x8200;
     blksfree = CalcBlksFree();
@@ -316,7 +335,8 @@ void updatePadHeader()
 
     UseSystemFont();
 
-    PutString(newDiskName, 27, 100);
+    startPrint = centerOver(135, currentDiskName);
+    PutString(currentDiskName, 27, startPrint);
         
     PutString(hdr1,39, 27);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);
@@ -330,6 +350,25 @@ void updatePadHeader()
     PutString(hdr4,39, 206);
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 200);
     
+}
+
+
+unsigned centerOver(unsigned x, unsigned char *text)
+{
+    unsigned char len = 0;
+    unsigned width = 0;
+    unsigned char ctr = 0;
+
+    if(text[0] == 0)
+        return 0;
+
+    while(text[len] != 0)
+        len++;
+
+    for(ctr=0;ctr<len;ctr++)
+        width += GetCharWidth(text[ctr]);
+
+    return (x - width/2);
 }
 
 unsigned getFileCount()
@@ -353,9 +392,9 @@ unsigned getFileCount()
     return ctr;
 }
 
-//#include "desktop-icons.c"
-//#include "desktop-vectors.c"
-//#include "desktop-menu.c"
+#include "desktop-icons.c"
+#include "desktop-vectors.c"
+#include "desktop-menu.c"
 
 
 

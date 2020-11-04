@@ -8,7 +8,18 @@
 #define DRIVE_C_TYPE  PEEK(0x8490)
 #define DRIVE_D_TYPE  PEEK(0x8491)
 
-extern unsigned char curPage;
+#define DRIVE_A_NAME 0x841e;
+#define DRIVE_B_NAME 0x8430;
+#define DRIVE_C_NAME 0x88dc;
+#define DRIVE_D_NAME 0x88ee;
+
+char *hdr1 = " files,";
+char *hdr2 = " selected";
+char *hdr3 = " Kbytes used";
+char *hdr4 = " Kbytes free";
+char currentDiskName[20];
+
+unsigned char curPage = 1;
 
 void initClock();
 void drawPad();
@@ -16,8 +27,10 @@ void drawFooter(unsigned char showPagingTabs);
 void updatePadHeader();
 void updateDirectory();
 void changeDevice(unsigned char deviceNumber);
+void updateDiskName();
 void updateClock();
 unsigned getFileCount();
+unsigned centerOver(unsigned x, unsigned char *text);
 
 
 #endif
