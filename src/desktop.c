@@ -173,7 +173,7 @@ void drawFooter(unsigned char showPagingTabs)
     
     InitDrawWindow(&winPadBackground);
 
-    if (showPagingTabs == 1)
+    if (showPagingTabs == TRUE)
     {
         HorizontalLine(255, 142, 23, 263);     
         
