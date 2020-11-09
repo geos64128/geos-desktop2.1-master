@@ -1,3 +1,14 @@
+// ============================================================
+/*
+
+GEOS 64 - DESKTOP V2.1
+A cc65 recreation of the GEOS v2.0 desktop application
+Written by Scott Hutter aka "xlar54"
+Special thanks to the cc65 development team
+
+*/
+//=============================================================
+
 #include <geos.h>
 #include <stdlib.h>
 #include <PeekPoke.h>
@@ -25,9 +36,10 @@ void main(void)
     initClock();
     initInputDriver();
     initIconTable();
+
     DoMenu(&mainMenu);
     
-    changeDevice(PEEK(0x8489));
+    changeDevice(curDrive); //PEEK(0x8489));
     
     hook_into_system();
     MainLoop();
@@ -181,46 +193,55 @@ void drawFooter(unsigned char showPagingTabs)
 void changeDevice(unsigned char deviceNumber)
 {
     char answer;
-    
-    
-    drawPad();
-    drawFooter(1);
-
+        
     SetDevice(deviceNumber);
     OpenDisk();
-         
-    //GetPtrCurDkNm(currentDiskName);  this doesnt work
-    //replaced with...
-    updateDiskName();
-    
-    if(!isGEOS)
+
+    if (_oserror != 0)
     {
-        answer = DlgBoxYesNo("This is a NON-GEOS disk.", "Convert it?");
-
-        if(answer == YES)
-        {
-            SetGEOSDisk();
-        }
-        else
-        {
-            DlgBoxOk("Hang on...", "Code not yet implemented");
-            drawPad();
-            drawFooter(0);
-            return;
-        }
+        DlgBoxOk("Operation cancelled due to", "Missing or unformatted disk");
+        drawPad();
+        drawFooter(FALSE);
+        return;
     }
+    else
+    {
+        drawPad();
+        drawFooter(TRUE);
 
-    initIconTable();
-    updateDriveIcons();
-    DoIcons(myicontab);
+        //GetPtrCurDkNm(currentDiskName);  this doesnt work
+        //replaced with...
+        updateDiskName();
+        
+        if(!isGEOS)
+        {
+            answer = DlgBoxYesNo("This is a NON-GEOS disk.", "Convert it?");
 
-    updatePadHeader();
-    
-    initIconTable();
-    updateDriveIcons();
-    updateDirectory();
-    DoIcons(myicontab);
+            if(answer == YES)
+            {
+                SetGEOSDisk();
+            }
+            else
+            {
+                DlgBoxOk("Hang on...", "Code not yet implemented");
+                drawPad();
+                drawFooter(0);
+                return;
+            }
+        }
 
+        initIconTable();
+        updateDriveIcons();
+        DoIcons(myicontab);
+
+        updatePadHeader();
+        
+        initIconTable();
+        updateDriveIcons();
+        updateDirectory();
+        DoIcons(myicontab);
+    }
+ 
 }
 
 void updateDiskName()
@@ -338,7 +359,6 @@ void updatePadHeader()
 {
     unsigned blksfree = 0;
     unsigned long tmp = 0;
-    unsigned char z;
     unsigned startPrint = 0;
 
     //GetDirHead();
@@ -368,7 +388,6 @@ void updatePadHeader()
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 200);
     
 }
-
 
 unsigned centerOver(unsigned x, unsigned char *text)
 {
