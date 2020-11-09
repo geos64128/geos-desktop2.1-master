@@ -23,9 +23,10 @@ unsigned char datetime[19];
 void main(void)
 {
     initClock();
+    initInputDriver();
     initIconTable();
     DoMenu(&mainMenu);
-
+    
     changeDevice(PEEK(0x8489));
     
     hook_into_system();
@@ -37,6 +38,22 @@ void initClock()
     InitDrawWindow(&winClockFrame);
     FrameRectangle(255);
     updateClock();
+}
+
+void initInputDriver()
+{
+    // Loads and installs first input driver on disk
+    // if none found, defaults to joystick
+
+    unsigned char buffer[17];
+    unsigned char x;
+
+    SetDevice(8);
+    OpenDisk();
+    x = FindFTypes (buffer, INPUT_DEVICE, 1, NULL);
+
+    if (x == 1)
+        GetFile(0,buffer,0,0,0);
 }
 
 void updateClock()

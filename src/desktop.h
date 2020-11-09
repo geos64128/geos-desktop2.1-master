@@ -22,6 +22,7 @@ char currentDiskName[20];
 unsigned char curPage = 1;
 
 void initClock();
+void initInputDriver();
 void drawPad();
 void drawFooter(unsigned char showPagingTabs);
 void updatePadHeader();
