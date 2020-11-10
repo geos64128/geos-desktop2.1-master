@@ -18,8 +18,10 @@ char *hdr2 = " selected";
 char *hdr3 = " Kbytes used";
 char *hdr4 = " Kbytes free";
 char currentDiskName[20];
+unsigned tmpr5;
 
 unsigned char curPage = 1;
+unsigned char maxPage = 1;
 
 void initClock();
 void initInputDriver();

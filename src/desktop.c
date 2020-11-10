@@ -273,57 +273,58 @@ void updateDiskName()
 
 void updateDirectory()
 {
+    unsigned ctr = 0;
     unsigned char z = 0;
-    unsigned char ctr = 0;
+    unsigned char eof = 0;
     unsigned tmp = 0;
     unsigned startPrint = 0;
-    
-    UseSystemFont();
 
-    if(curPage == 1)
-        curFileHandle = Get1stDirEntry();
+    if(curPage > maxPage)
+        curPage = 1;
     else
-        curFileHandle = GetNxtDirEntry();
-
+        r5 = tmpr5;
+    
     do
-    {       
+    {   
+        curFileHandle = (curPage == 1 && ctr == 0 ? Get1stDirEntry() : GetNxtDirEntry());
+        asm("tya");
+        if(__A__ != 0)
+            break;
+
         if (curFileHandle->dostype != 0)
-        {     
-            //PutDecimal(SET_LEFTJUST + SET_SURPRESS, curFileHandle->dostype,  190, 10 + (20*ctr));
-            // r5 (curFileHandle) is trashed by DoIcons and PutString
-            tmp = r5;
-            if(GetFHdrInfo(curFileHandle) == 0) 
+        {
+            // copy and clean up filename
+            for(z=0; z<17; z++)
+            {
+                if(curFileHandle->name[z] == 0xa0) break;
+                fileIconNames[ctr][z] = curFileHandle->name[z];
+            };
+            fileIconNames[ctr][z] = 0;
+
+            if(GetFHdrInfo(curFileHandle) ==0)
             {
                 //copy icon image data
                 for(z=0; z < 63; z++)
                     fileIconImages[ctr][z+1] = fileHeader.icon_pic[z];
-
-                // copy and clean up filename
-                for(z=0; z<17; z++)
-                {
-                    if(curFileHandle->name[z] == 0xa0)
-                        break;
-                    fileIconNames[ctr][z] = curFileHandle->name[z];
-                };
-                fileIconNames[ctr][z] = 0;
-                ctr++;              
             }
-            r5 = tmp;   
+
+            ctr++;
+        } 
+        else 
+        {
+            if (curFileHandle->name[0] == 0)
+            {
+                // empty icon space
+                for(z=0; z < 63; z++)
+                    fileIconImages[ctr][z+1] = 0;
+                
+                fileIconNames[ctr][0] = 0;
+                ctr++;
+            }  
         }
 
-        // empty icon space
-        if(curFileHandle->dostype == 0 && curFileHandle->name[0] == 0)
-        {
-            for(z=0; z < 63; z++)
-                fileIconImages[ctr][z+1] = 0;
-            
-            fileIconNames[ctr][0] = 0;
-            ctr++;  
-        }
-        
-        if(ctr < 8)
-            curFileHandle = GetNxtDirEntry();
-        
+        tmpr5 = r5;
+
     } while (ctr < 8);
 
     // Display icons and filenames
@@ -351,7 +352,6 @@ void updateDirectory()
     } while(TRUE);
     
     UseSystemFont();
-
     PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
 }
 
@@ -425,8 +425,14 @@ unsigned getFileCount()
         
     } while (eof == 0);
 
+    maxPage = ctr / 8;
+
+    if(ctr % 8 != 0)
+        maxPage++;
+
     return ctr;
 }
+
 
 #include "desktop-icons.c"
 #include "desktop-vectors.c"

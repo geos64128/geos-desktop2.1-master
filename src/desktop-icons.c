@@ -236,22 +236,25 @@ void iconCloseDiskHandler()
 
 void iconHandlerDrvA()
 {
+    curPage = 1;
     changeDevice(8);
 }
 
 void iconHandlerDrvB()
 {
+    curPage = 1;
     changeDevice(9);
 }
 
 void iconHandlerDrvC()
 {
+    curPage = 1;
     changeDevice(10);
 }
 
-
 void iconHandlerDrvD()
 {
+    curPage = 1;
      changeDevice(11);
 }
 
