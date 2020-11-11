@@ -63,7 +63,7 @@ void newOtherPressVectorHandler(void)
                     unselectAllFileIcons();
                     selectFileIcon(tmp);
                     
-                    numSelected++;
+                    numSelected=1;
 
                     // update selected pad header
                     PutString("  ", 39,64);
