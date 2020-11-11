@@ -1,12 +1,10 @@
 // ============================================================
-/*
-
-GEOS 64 - DESKTOP V2.1
-A cc65 recreation of the GEOS v2.0 desktop application
-Written by Scott Hutter aka "xlar54"
-Special thanks to the cc65 development team
-
-*/
+//
+// GEOS 64 - DESKTOP V2.1
+// A cc65 recreation of the GEOS v2.0 desktop application
+// Written by Scott Hutter aka "xlar54"
+// Special thanks to the cc65 development team
+//
 //=============================================================
 
 #include <geos.h>
@@ -191,9 +189,7 @@ void drawFooter(unsigned char showPagingTabs)
 }
 
 void changeDevice(unsigned char deviceNumber)
-{
-    char answer;
-        
+{      
     SetDevice(deviceNumber);
     OpenDisk();
 
@@ -215,19 +211,8 @@ void changeDevice(unsigned char deviceNumber)
         
         if(!isGEOS)
         {
-            answer = DlgBoxYesNo("This is a NON-GEOS disk.", "Convert it?");
-
-            if(answer == YES)
-            {
+            if(DlgBoxYesNo("This is a NON-GEOS disk.", "Convert it?") == YES)
                 SetGEOSDisk();
-            }
-            else
-            {
-                DlgBoxOk("Hang on...", "Code not yet implemented");
-                drawPad();
-                drawFooter(0);
-                return;
-            }
         }
 
         initIconTable();
@@ -306,6 +291,12 @@ void updateDirectory()
                 //copy icon image data
                 for(z=0; z < 63; z++)
                     fileIconImages[ctr][z+1] = fileHeader.icon_pic[z];
+            }
+            else
+            {
+                //copy cbm file icon image data
+                for(z=0; z < 64; z++)
+                    fileIconImages[ctr][z] = cbmFileIcon[z];
             }
 
             ctr++;
