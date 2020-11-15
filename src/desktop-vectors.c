@@ -20,10 +20,12 @@ void newOtherPressVectorHandler(void)
     unsigned char tmp = 0;
     unsigned char tmp2 = 0;
     unsigned char typeSelected = 0;
+    
 
     // if mouse down, check region
     if(mouseData == 0)
     {
+        
         // did user click paging tabs?
         for(tmp=0; tmp < 14; tmp++)
         {
@@ -59,54 +61,76 @@ void newOtherPressVectorHandler(void)
             for(tmp=0; tmp<8;tmp++)
             {
                 if(IsMseInRegion(&fileIconWindows[tmp]) && fileIconNames[tmp][0] != 0)
-                {
-                    unselectAllFileIcons();
-                    selectFileIcon(tmp);
-                    
-                    numSelected=1;
-
-                    // update selected pad header
-                    PutString("  ", 39,64);
-                    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
-
-                    // check for double click
-                    // $8515 counts down from the applied value to zero every interrupt
-                    dblClickCount = 30; //POKE(0x8515, 30);
-                    while (dblClickCount != 0) //(PEEK(0x8515) != 0)
+                { 
+                    if (fileIconSelected[tmp] == 1)
                     {
-                        if(mouseData == 128)
+                        if(dragMode == 0)
                         {
-                            while (dblClickCount != 0) //(PEEK(0x8515) != 0)
-                            {
-                                if(mouseData == 0)
-                                {
-                                    numSelected = 0;
-                                    PutString("  ", 39,64);
-                                    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
-
-                                    unselectAllFileIcons();
-                                    
-                                    FindFile(fileIconNames[tmp]);
-                                    loadFileHandle = &dirEntryBuf;
-
-                                    if(loadFileHandle->type == DESK_ACC || loadFileHandle->type == APPLICATION
-                                    || loadFileHandle->type == AUTO_EXEC)
-                                    {
-                                        GetFile(0,fileIconNames[tmp],0,0,0);
-                                    }
-                                    else
-                                    {
-                                        DlgBoxOk("This file can't be opened", "by the deskTop.");
-                                    }
-                                    
-                                    
-                                }
-                                    
-                            }
-
+                            DrawSprite(1, fileIcons[tmp].pic_ptr+1);
+                            location.x = mouseXPos-12;
+                            location.y = mouseYPos-10;
+                            PosSprite(1, &location);
+                            EnablSprite(1);
+                            dragMode = 1;
                         }
-                        
+                        else
+                        {
+                            dragMode = 0;
+                            DisablSprite(1);
+                        }
                     }
+                    else
+                    {
+                        unselectAllFileIcons();
+                        selectFileIcon(tmp);
+                        
+                        numSelected=1;
+
+                        // update selected pad header
+                        PutString("  ", 39,64);
+                        PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+
+                        // check for double click
+                        // $8515 counts down from the applied value to zero every interrupt
+                        dblClickCount = 30; //POKE(0x8515, 30);
+                        while (dblClickCount != 0) //(PEEK(0x8515) != 0)
+                        {
+                            if(mouseData == 128)
+                            {
+                                while (dblClickCount != 0) //(PEEK(0x8515) != 0)
+                                {
+                                    if(mouseData == 0)
+                                    {
+                                        numSelected = 0;
+                                        PutString("  ", 39,64);
+                                        PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+
+                                        unselectAllFileIcons();
+                                        
+                                        FindFile(fileIconNames[tmp]);
+                                        loadFileHandle = &dirEntryBuf;
+
+                                        if(loadFileHandle->type == DESK_ACC || loadFileHandle->type == APPLICATION
+                                        || loadFileHandle->type == AUTO_EXEC)
+                                        {
+                                            GetFile(0,fileIconNames[tmp],0,0,0);
+                                        }
+                                        else
+                                        {
+                                            DlgBoxOk("This file can't be opened", "by the deskTop.");
+                                        }
+                                        
+                                        
+                                    }
+                                        
+                                }
+
+                            }
+                            
+                        }
+                    }
+                    
+                    
                 }
             }
         }
@@ -118,12 +142,28 @@ void newOtherPressVectorHandler(void)
 
 void newAppMainHandler(void) {
         
+        unsigned char x = 0;
+
         if(system_date.s_minutes != lastMinute)
         {
             updateClock();
             lastMinute = system_date.s_minutes;
         }
-                 
+
+        if(dragMode == 1)
+        {
+            for(x=0;x<8;x++)
+            {
+                if(fileIconSelected[x] == 1)
+                {
+                    location.x = mouseXPos-12;
+                    location.y = mouseYPos-10;
+                    PosSprite(1, &location);
+                }
+            }            
+        }  
+
+
         oldAppMain();
 }
 
