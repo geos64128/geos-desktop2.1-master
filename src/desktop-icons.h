@@ -12,6 +12,10 @@ struct window fileIconWindows[8];
 unsigned char fileIconNames[8][17];
 unsigned char fileIconSelected[8];
 
+struct pixel location;
+unsigned char dragMode = 0;
+struct filehandle *loadFileHandle;
+
 char drvIcon1541[] = {192,0,0,0,63,255,252,64,0,2,95,255,250,
 95,255,250,64,0,2,71,255,194,71,255,194,71,255,194,68,0,66,
 87,255,194,71,255,194,127,255,254,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -53,6 +57,12 @@ char cbmFileIcon[] = {192,
 129,130,1,130,6,1,131,138,1,130,95,1,129,130,1,128,0,1,255,255,255
 };
 
+char multiFileIcon[] = {192,
+255,255,255,128,0,1,128,0,1,162,0,137,182,4,129,170,149,233,162,148,137,
+162,148,137,162,116,105,128,0,1,128,0,1,143,88,1,136,9,193,142,74,33,
+136,75,225,136,74,1,136,73,225,128,0,1,128,0,1,128,0,1,255,255,255,
+};
+
 char fileIconImages[][] = {
     {192, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {192, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -79,8 +89,14 @@ void iconHandlerDrvA();
 void iconHandlerDrvB();
 void iconHandlerDrvC();
 void iconHandlerDrvD();
-void iconHandlerRunApp();
+void iconHandlerRunApp(unsigned char iconnumber);
 
+signed char clickPagerCheck();
+signed char clickFileIconCheck();
+unsigned char dblClickFileIconCheck();
+
+void iconBeginDrag(unsigned char iconnumber);
+void iconEndDrag();
 
 
 #endif

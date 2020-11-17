@@ -184,6 +184,12 @@ void selectFileIcon(unsigned char iconnumber)
     InvertRectangle();
 
     fileIconSelected[iconnumber] = 1;
+
+    numSelected++;
+
+    // update selected pad header
+    PutString("  ", 39,64);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
 }
 
 void unselectFileIcon(unsigned char iconnumber)
@@ -193,6 +199,12 @@ void unselectFileIcon(unsigned char iconnumber)
     InvertRectangle();
 
     fileIconSelected[iconnumber] = 0;
+
+    numSelected--;
+
+    // update selected pad header
+    PutString("  ", 39,64);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
 }
 
 void unselectAllFileIcons()
@@ -205,6 +217,10 @@ void unselectAllFileIcons()
         if(fileIconSelected[tmp] == 1)
             unselectFileIcon(tmp);
     }
+
+    numSelected = 0;
+    PutString("  ", 39,64);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
 }
 
 void unselectAllFileIconsExcept(unsigned char iconnumber)
@@ -220,6 +236,10 @@ void unselectAllFileIconsExcept(unsigned char iconnumber)
             break;
         }
     }
+
+    numSelected = 1;
+    PutString("  ", 39,64);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
 }
 
 void iconHandler() 
@@ -259,7 +279,93 @@ void iconHandlerDrvD()
 }
 
 
-void iconHandlerRunApp()
+void iconHandlerRunApp(unsigned char iconnumber)
 {
+    unselectAllFileIcons();
+    
+    FindFile(fileIconNames[iconnumber]);
+    loadFileHandle = &dirEntryBuf;
 
+    if(loadFileHandle->type == DESK_ACC || loadFileHandle->type == APPLICATION || loadFileHandle->type == AUTO_EXEC)
+    {
+        GetFile(0,fileIconNames[iconnumber],0,0,0);
+    }
+    else
+        DlgBoxOk("This file can't be opened", "by the deskTop.");
+}
+
+signed char clickPagerCheck()
+{
+    unsigned char tmp = 0;
+
+    // did user click paging tabs?
+    for(tmp=0; tmp < 14; tmp++)
+    {
+        if(mouseYPos > 126 && mouseYPos< 142)
+        {
+            if((mouseYPos == (127 + tmp)) && ((mouseXPos > (8+tmp)) && (mouseXPos < 24))) { 
+                return 1;
+            };
+            
+            if((mouseYPos == 127 + tmp) && (mouseXPos > 8 && mouseXPos < (10 + tmp))) { 
+                return -1;
+            };
+        }
+    }
+
+    return 0;
+}
+
+signed char clickFileIconCheck()
+{
+    unsigned char tmp = 0;
+
+    for(tmp=0; tmp<8;tmp++)
+    {
+        if(IsMseInRegion(&fileIconWindows[tmp]) && fileIconNames[tmp][0] != 0)
+            return tmp;
+    } 
+
+    return -1;
+}
+
+unsigned char dblClickFileIconCheck()
+{
+    // setting dblClickCount counts down each irq to zero
+    // 30 cycles to perform a double click
+    dblClickCount = 30;
+
+    while (dblClickCount != 0)
+    {
+        // if mouse button released...
+        if(mouseData == 128)
+        {
+            while (dblClickCount != 0)
+            {
+                // and then clicked again...
+                if(mouseData == 0)
+                {
+                    return TRUE;
+                }     
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+void iconBeginDrag(unsigned char iconnumber)
+{
+    DrawSprite(1, fileIcons[iconnumber].pic_ptr+1);
+    location.x = mouseXPos-12;
+    location.y = mouseYPos-10;
+    PosSprite(1, &location);
+    EnablSprite(1);
+    dragMode = 1;
+}
+
+void iconEndDrag() 
+{
+    dragMode = 0;
+    DisablSprite(1);
 }
