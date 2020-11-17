@@ -54,7 +54,7 @@ void newOtherPressVectorHandler(void)
             else
             {
                 // select the icon
-                if(cbmKeyPressed == TRUE)
+                if(isCBMKeyPressed() == TRUE)
                 {
                     selectFileIcon(selected);
                 }
@@ -96,57 +96,45 @@ void newAppMainHandler(void) {
 
         if(dragMode == 1)
         {
-            //PutDecimal(SET_LEFTJUST + SET_SURPRESS, x,  190, 100);
-
-            if (x == 223)
-                iconEndDrag();
-            else
+            for(x=0;x<8;x++)
             {
-                for(x=0;x<8;x++)
+                if(fileIconSelected[x] == 1)
                 {
-                    if(fileIconSelected[x] == 1)
-                    {
-                        location.x = mouseXPos-12;
-                        location.y = mouseYPos-10;
-                        PosSprite(1, &location);
-                    }
-                }                   
-            }         
+                    location.x = mouseXPos-12;
+                    location.y = mouseYPos-10;
+                    PosSprite(1, &location);
+                }
+            }                          
         } 
-
-        if (mouseData != 0)
-        {
-            // set flag if cbm key is pressed
-
-            // disable interrupts, switch IO in
-            asm("php");
-            asm("sei");
-            asm("lda $01");
-            asm("pha");
-            asm("lda #$35");
-            asm("sta $01");
-
-            asm("lda #$7f"); // col 7 (%011111111)
-            asm("sta $dc00");
-            asm("lda $dc01");
-            asm("and #$20"); // mask row 5 (%00100000)
-
-            x = __A__;
-            
-            // restore GEOS kernal
-            asm("pla");
-            asm("sta $01");
-            asm("plp");
-
-            cbmKeyPressed = (x == 0 ? TRUE : FALSE);
-
-            //PutDecimal(SET_LEFTJUST + SET_SURPRESS, cbmKeyPressed,  190, 100);
-            
-        }
 
         oldAppMain();
 }
 
+unsigned char isCBMKeyPressed() 
+{
+    unsigned char x = 0;
+    
+    // disable interrupts, switch IO in
+    asm("php");
+    asm("sei");
+    asm("lda $01");
+    asm("pha");
+    asm("lda #$35");
+    asm("sta $01");
 
+    asm("lda #$7f"); // col 7 (%011111111)
+    asm("sta $dc00");
+    asm("lda $dc01");
+    asm("and #$20"); // mask row 5 (%00100000)
+
+    x = __A__;
+    
+    // restore GEOS kernal
+    asm("pla");
+    asm("sta $01");
+    asm("plp");
+
+    return (x == 0 ? TRUE : FALSE);
+}
 
 

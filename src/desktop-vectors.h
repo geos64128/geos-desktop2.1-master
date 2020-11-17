@@ -16,6 +16,6 @@ void remove_hook(void);
 void newOtherPressVectorHandler(void);
 void newAppMainHandler(void);
 
-
+unsigned char isCBMKeyPressed();
 
 #endif
