@@ -25,9 +25,11 @@ unsigned char maxPage = 1;
 
 void initClock();
 void initInputDriver();
+void drawScreen();
 void drawPad();
 void drawFooter(unsigned char showPagingTabs);
 void updatePadHeader();
+void updateNumSelected();
 void updateDirectory();
 void changeDevice(unsigned char deviceNumber);
 void updateDiskName();

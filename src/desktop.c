@@ -25,19 +25,30 @@ struct window winPadBackground = {20,145,9,262};
 struct filehandle *curFileHandle;
 unsigned numFiles = 0;
 unsigned numSelected = 0;
-unsigned kbytesUsed = 0;
-unsigned kbytesfree = 0;
+unsigned long kbytesUsed = 0;
+unsigned long kbytesfree = 0;
 unsigned char datetime[19];
+unsigned char backColor = 0;
+
+const graphicStr clrScreen = {
+        MOVEPENTO(0,0),
+        NEWPATTERN(2),
+        RECTANGLETO(319,199),
+        GSTR_END };
 
 void main(void)
 {
-    initClock();
     initInputDriver();
     initIconTable();
 
-    DoMenu(&mainMenu);
+    backColor = PEEK(0x8c00);
     
-    changeDevice(curDrive); //PEEK(0x8489));
+    drawScreen();
+    //DoMenu(&mainMenu);
+    //initClock();
+    //updateClock();
+    
+    changeDevice(curDrive);
     
     hook_into_system();
     MainLoop();
@@ -163,7 +174,7 @@ void drawPad()
     HorizontalLine(255, 29, 8, 263);
     HorizontalLine(255, 31, 8, 263);
     
-    HorizontalLine(255, 42, 8, 263);
+    HorizontalLine(255, 43, 8, 263);
 }
 
 void drawFooter(unsigned char showPagingTabs)
@@ -187,6 +198,19 @@ void drawFooter(unsigned char showPagingTabs)
     }
     
     HorizontalLine(255, 144, 8, 263);
+}
+
+void drawScreen()
+{
+    FillRam (0x8c00, backColor, 1000);
+    GraphicsString(&clrScreen);
+    
+    DoMenu(&mainMenu);
+    initClock();
+    updateClock();
+    
+    //changeDevice(curDrive);
+    
 }
 
 void changeDevice(unsigned char deviceNumber)
@@ -350,16 +374,16 @@ void updateDirectory()
 
 void updatePadHeader()
 {
-    unsigned blksfree = 0;
+    unsigned long blksfree = 0;
     unsigned long tmp = 0;
     unsigned startPrint = 0;
 
-    //GetDirHead();
+    GetDirHead();
 
-    r5 = 0x8200;
     blksfree = CalcBlksFree();
-    tmp = blksfree * 256;
-    kbytesfree = tmp / 1000; //256;
+    tmp = r3;
+    kbytesfree = blksfree * 256 / 1000;
+    kbytesUsed = (tmp * 256 / 1000) - kbytesfree;
 
     numFiles = getFileCount();
 
@@ -367,19 +391,25 @@ void updatePadHeader()
 
     startPrint = centerOver(135, currentDiskName);
     PutString(currentDiskName, 27, startPrint);
-        
-    PutString(hdr1,39, 27);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);
     
-    PutString(hdr2,39, 68);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+    PutString(hdr1,39, 26);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numFiles,  39, 18);    
     
-    PutString(hdr3,39, 123);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesUsed,  39, 118);
+    PutString(hdr2,39, 66);    
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 62);
     
-    PutString(hdr4,39, 206);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 200);
+    PutString(hdr3,39, 126);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesUsed,  39, 116);
     
+    PutString(hdr4,39, 196);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, kbytesfree, 39, 190);
+
+}
+
+void updateNumSelected()
+{
+    PutString("  ", 39,62);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 62);
 }
 
 unsigned centerOver(unsigned x, unsigned char *text)

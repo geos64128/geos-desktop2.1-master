@@ -188,8 +188,7 @@ void selectFileIcon(unsigned char iconnumber)
     numSelected++;
 
     // update selected pad header
-    PutString("  ", 39,64);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+    updateNumSelected();
 }
 
 void unselectFileIcon(unsigned char iconnumber)
@@ -203,8 +202,7 @@ void unselectFileIcon(unsigned char iconnumber)
     numSelected--;
 
     // update selected pad header
-    PutString("  ", 39,64);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+    updateNumSelected();
 }
 
 void unselectAllFileIcons()
@@ -219,8 +217,7 @@ void unselectAllFileIcons()
     }
 
     numSelected = 0;
-    PutString("  ", 39,64);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+    updateNumSelected();
 }
 
 void unselectAllFileIconsExcept(unsigned char iconnumber)
@@ -238,8 +235,7 @@ void unselectAllFileIconsExcept(unsigned char iconnumber)
     }
 
     numSelected = 1;
-    PutString("  ", 39,64);
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, numSelected,  39, 64);
+    updateNumSelected();
 }
 
 void iconHandler() 
@@ -256,24 +252,32 @@ void iconCloseDiskHandler()
 
 void iconHandlerDrvA()
 {
+    unselectAllFileIcons();
+
     curPage = 1;
     changeDevice(8);
 }
 
 void iconHandlerDrvB()
 {
+    unselectAllFileIcons();
+
     curPage = 1;
     changeDevice(9);
 }
 
 void iconHandlerDrvC()
 {
+    unselectAllFileIcons();
+
     curPage = 1;
     changeDevice(10);
 }
 
 void iconHandlerDrvD()
 {
+    unselectAllFileIcons();
+
     curPage = 1;
      changeDevice(11);
 }
@@ -289,6 +293,7 @@ void iconHandlerRunApp(unsigned char iconnumber)
     if(loadFileHandle->type == DESK_ACC || loadFileHandle->type == APPLICATION || loadFileHandle->type == AUTO_EXEC)
     {
         GetFile(0,fileIconNames[iconnumber],0,0,0);
+        drawScreen();
     }
     else
         DlgBoxOk("This file can't be opened", "by the deskTop.");
