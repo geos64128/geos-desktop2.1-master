@@ -41,12 +41,10 @@ void main(void)
     initInputDriver();
     initIconTable();
 
+    // store for restore purpose
     backColor = PEEK(0x8c00);
     
     drawScreen();
-    //DoMenu(&mainMenu);
-    //initClock();
-    //updateClock();
     
     changeDevice(curDrive);
     
@@ -207,10 +205,7 @@ void drawScreen()
     
     DoMenu(&mainMenu);
     initClock();
-    updateClock();
-    
-    //changeDevice(curDrive);
-    
+    updateClock();   
 }
 
 void changeDevice(unsigned char deviceNumber)
@@ -248,6 +243,8 @@ void changeDevice(unsigned char deviceNumber)
         
         initIconTable();
         updateDriveIcons();
+        
+        curPage = 1;
         updateDirectory();
         DoIcons(myicontab);
     }
