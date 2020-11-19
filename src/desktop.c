@@ -81,13 +81,17 @@ void updateClock()
     
     hr = system_date.s_hour;
     
-    if(hr > 11)
+    if(hr > 12)
     {
-       datetime[16] = 'P';
-       hr = 24-hr;
+        hr = hr - 12;
+        datetime[16] = 'P';
     }
     else
+    {
+        if (hr==0) hr = 12;
         datetime[16] = 'A';
+    }
+        
 
     if(hr == 0) 
         hr = 12;           
@@ -272,8 +276,9 @@ void updateDirectory()
     do
     {   
         curFileHandle = (curPage == 1 && ctr == 0 ? Get1stDirEntry() : GetNxtDirEntry());
-        asm("tya");
-        if(__A__ != 0)
+        //asm("tya");
+        //if(__A__ != 0)
+        if(curFileHandle == NULL)
             break;
 
         if (curFileHandle->dostype != 0)
