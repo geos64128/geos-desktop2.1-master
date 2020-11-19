@@ -93,9 +93,6 @@ void updateClock()
     }
         
 
-    if(hr == 0) 
-        hr = 12;           
-    
     itoa(system_date.s_month, (char *)strMonth, 10);
     itoa(system_date.s_day, (char *)strDay, 10);
     itoa(system_date.s_year, (char *)strYear, 10);
@@ -362,7 +359,7 @@ void updatePadHeader()
     r5 = 0x8200;
     blksfree = CalcBlksFree();
     tmp = blksfree * 256;
-    kbytesfree = tmp/256;
+    kbytesfree = tmp / 1000; //256;
 
     numFiles = getFileCount();
 
