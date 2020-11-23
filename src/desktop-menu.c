@@ -124,6 +124,8 @@ void mnu_select_allpages (void)
 void mnu_select_pagefiles (void)
 {
     GotoFirstMenu();
+
+    selectAllFileIcons();
 };
 
 void mnu_select_borderfiles (void)

@@ -25,6 +25,7 @@ unsigned char maxPage = 1;
 
 void initClock();
 void initInputDriver();
+void initPrinterDriver();
 void drawScreen();
 void drawPad();
 void drawFooter(unsigned char showPagingTabs);

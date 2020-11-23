@@ -191,6 +191,23 @@ void selectFileIcon(unsigned char iconnumber)
     updateNumSelected();
 }
 
+void selectAllFileIcons()
+{
+    unsigned char tmp = 0;
+
+    //unselect all
+    for(tmp=0; tmp<8;tmp++)
+    {
+        if(fileIconSelected[tmp] == 0 && fileIconNames[tmp][0] != 0)
+        {
+            selectFileIcon(tmp);
+            numSelected++;
+        }
+    }
+    
+    updateNumSelected();
+}
+
 void unselectFileIcon(unsigned char iconnumber)
 {
     // reverse the icon image

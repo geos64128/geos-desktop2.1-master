@@ -48,6 +48,8 @@ void main(void)
     
     changeDevice(curDrive);
     
+    initPrinterDriver();
+
     hook_into_system();
     MainLoop();
 };
@@ -73,6 +75,36 @@ void initInputDriver()
 
     if (x == 1)
         GetFile(0,buffer,0,0,0);
+}
+
+void initPrinterDriver()
+{
+    // Loads and installs first printer driver on disk
+    // if none found, "not on disk"
+
+    unsigned char buffer[17];
+    const char notondisk[] = "NOT ON DISK";
+    unsigned char tmp;
+    unsigned char x;
+
+    SetDevice(8);
+    OpenDisk();
+    tmp = FindFTypes (buffer, PRINTER, 1, NULL);
+
+    LoadCharSet ((struct fontdesc *)(bsw_small));
+
+    if (tmp == 1)
+    {
+        x = centerOver(36, buffer);
+        PutString(buffer,177, x);
+    }
+    else
+    {
+        x = centerOver(36, notondisk);
+        PutString(notondisk,177, x); 
+    }
+
+    UseSystemFont();
 }
 
 void updateClock()
