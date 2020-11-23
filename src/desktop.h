@@ -30,6 +30,8 @@ void drawPad();
 void drawFooter(unsigned char showPagingTabs);
 void updatePadHeader();
 void updateNumSelected();
+unsigned char getPageCount();
+unsigned char goPage(unsigned char pageNumber);
 void updateDirectory();
 void changeDevice(unsigned char deviceNumber);
 void updateDiskName();

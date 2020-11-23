@@ -30,10 +30,10 @@ void newOtherPressVectorHandler(void)
 
         if (pager != 0)
         {
-            clearAllFileIcons();
             curPage = curPage + pager;
             curPage = (curPage == 0 ? maxPage : curPage);
             curPage = (curPage > maxPage ? 1 : curPage);
+            goPage(curPage);
             updateDirectory();
             return;
         } 
@@ -113,7 +113,7 @@ void newAppMainHandler(void) {
 unsigned char isCBMKeyPressed() 
 {
     unsigned char x = 0;
-    
+
     // disable interrupts, switch IO in
     asm("php");
     asm("sei");

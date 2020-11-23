@@ -224,6 +224,7 @@ void changeDevice(unsigned char deviceNumber)
     {
         drawPad();
         drawFooter(TRUE);
+        maxPage = getPageCount();
 
         //GetPtrCurDkNm(currentDiskName);  this doesnt work
         //replaced with...
@@ -245,6 +246,7 @@ void changeDevice(unsigned char deviceNumber)
         updateDriveIcons();
         
         curPage = 1;
+        goPage(curPage);
         updateDirectory();
         DoIcons(myicontab);
     }
@@ -278,6 +280,31 @@ void updateDiskName()
     currentDiskName[z] = 0;
 }
 
+unsigned char goPage(unsigned char pageNumber)
+{
+    struct tr_se ts;
+
+    if(pageNumber > maxPage)
+        return 0;
+
+    curPage = 1;
+    
+    Get1stDirEntry();
+    ts.track = PEEK(0x8000);
+    ts.sector = PEEK(0x8001);
+
+    while(curPage != pageNumber)
+    {
+        ReadBuff(&ts);
+        ts.track = PEEK(0x8000);
+        ts.sector = PEEK(0x8001);
+
+        curPage++;
+    }
+    
+    return curPage;
+}
+
 void updateDirectory()
 {
     unsigned ctr = 0;
@@ -285,17 +312,18 @@ void updateDirectory()
     unsigned char eof = 0;
     unsigned tmp = 0;
     unsigned startPrint = 0;
+    
+    clearAllFileIcons();
 
-    if(curPage > maxPage)
-        curPage = 1;
-    else
-        r5 = tmpr5;
+    // GetNxtDirEntry() adds $20 to the current pointer, so
+    // we subtract $20 so that the pointer gives us the
+    // first file handle on this page
+    r5 = 0x8002 - 0x20;
     
     do
     {   
         curFileHandle = (curPage == 1 && ctr == 0 ? Get1stDirEntry() : GetNxtDirEntry());
-        //asm("tya");
-        //if(__A__ != 0)
+        
         if(curFileHandle == NULL)
             break;
 
@@ -326,15 +354,12 @@ void updateDirectory()
         } 
         else 
         {
-            if (curFileHandle->name[0] == 0)
-            {
-                // empty icon space
-                for(z=0; z < 63; z++)
-                    fileIconImages[ctr][z+1] = 0;
-                
-                fileIconNames[ctr][0] = 0;
-                ctr++;
-            }  
+            // empty icon space
+            for(z=0; z < 63; z++)
+                fileIconImages[ctr][z+1] = 0;
+            
+            fileIconNames[ctr][0] = 0;
+            ctr++;
         }
 
         tmpr5 = r5;
@@ -343,7 +368,7 @@ void updateDirectory()
 
     // Display icons and filenames
     // Desktop prints these in reverse order
-
+    
     LoadCharSet ((struct fontdesc *)(bsw_small));
     
     tmp = (ctr == 8 ? 7 : ctr);
@@ -366,7 +391,9 @@ void updateDirectory()
     } while(TRUE);
     
     UseSystemFont();
-    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 135);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, curPage,  135, 128);
+    PutString("of", 135, 135);
+    PutDecimal(SET_LEFTJUST + SET_SURPRESS, maxPage,  135, 147);
 }
 
 void updatePadHeader()
@@ -440,19 +467,32 @@ unsigned getFileCount()
             ctr++;              
         
         curFileHandle = GetNxtDirEntry();
-        asm("sty $02");
-        eof = PEEK(2);
         
-    } while (eof == 0);
-
-    maxPage = ctr / 8;
-
-    if(ctr % 8 != 0)
-        maxPage++;
+    } while (curFileHandle != NULL);
 
     return ctr;
 }
 
+unsigned char getPageCount()
+{
+    struct tr_se ts;
+    unsigned char pageCount;
+
+    curFileHandle = Get1stDirEntry();
+    ts.track = PEEK(0x8000);
+    ts.sector = PEEK(0x8001);
+    pageCount = 1;
+    
+    while(ts.track != 0)
+    {
+        ReadBuff(&ts);
+        ts.track = PEEK(0x8000);
+        ts.sector = PEEK(0x8001);
+        pageCount++;
+    };
+    
+    return pageCount;
+}
 
 #include "desktop-icons.c"
 #include "desktop-vectors.c"
