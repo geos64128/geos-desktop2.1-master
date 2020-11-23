@@ -23,7 +23,26 @@ void mnu_geos_selectInput (void)
 
 void mnu_file_open (void)
 {
+    unsigned char tmp;
+    unsigned char ctr;
+
     GotoFirstMenu();
+
+    if(numSelected > 1)
+    {
+        DlgBoxOk("No multiple file operation for", "this feature.");
+    }
+    else
+    {
+        for(tmp=0; tmp<8;tmp++)
+        {
+            if(fileIconSelected[tmp] == 1)
+            {
+                iconHandlerRunApp(tmp);
+                break;
+            }
+        }
+    }
 };
 
 void mnu_file_duplicate (void)
