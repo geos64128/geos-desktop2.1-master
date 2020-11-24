@@ -526,9 +526,11 @@ unsigned char getPageCount()
     return pageCount;
 }
 
+#include "desktop-info.c"
 #include "desktop-icons.c"
 #include "desktop-vectors.c"
 #include "desktop-menu.c"
+
 
 
 

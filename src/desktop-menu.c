@@ -24,7 +24,6 @@ void mnu_geos_selectInput (void)
 void mnu_file_open (void)
 {
     unsigned char tmp;
-    unsigned char ctr;
 
     GotoFirstMenu();
 
@@ -57,7 +56,25 @@ void mnu_file_rename (void)
 
 void mnu_file_info (void)
 {
+    unsigned char tmp;
+
     GotoFirstMenu();
+
+    if(numSelected > 1)
+    {
+        DlgBoxOk("No multiple file operation for", "this feature.");
+    }
+    else
+    {
+        for(tmp=0; tmp<8;tmp++)
+        {
+            if(fileIconSelected[tmp] == 1)
+            {
+                info_draw(fileIconNames[tmp]);
+                break;
+            }
+        }
+    }
 };
 
 void mnu_file_print (void)
