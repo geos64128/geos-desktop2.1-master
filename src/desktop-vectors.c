@@ -44,7 +44,7 @@ void newOtherPressVectorHandler(void)
         if(selected != -1)
         {
             // if icon is already selected, start drag operation
-            if (fileIconSelected[selected] == 1)
+            if (padIcons[selected].selected == 1)
             {
                 if(dragMode == 0)
                     iconBeginDrag(selected);
@@ -98,7 +98,7 @@ void newAppMainHandler(void) {
         {
             for(x=0;x<8;x++)
             {
-                if(fileIconSelected[x] == 1)
+                if(padIcons[x].selected == 1)
                 {
                     location.x = mouseXPos-12;
                     location.y = mouseYPos-10;

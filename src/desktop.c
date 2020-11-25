@@ -365,21 +365,22 @@ void updateDirectory()
             for(z=0; z<17; z++)
             {
                 if(curFileHandle->name[z] == 0xa0) break;
-                fileIconNames[ctr][z] = curFileHandle->name[z];
+                padIcons[ctr].filename[z] = curFileHandle->name[z];
             };
-            fileIconNames[ctr][z] = 0;
+
+            padIcons[ctr].filename[z] = 0;
 
             if(GetFHdrInfo(curFileHandle) ==0)
             {
                 //copy icon image data
                 for(z=0; z < 63; z++)
-                    fileIconImages[ctr][z+1] = fileHeader.icon_pic[z];
+                    padIcons[ctr].iconData[z+1] = fileHeader.icon_pic[z];
             }
             else
             {
                 //copy cbm file icon image data
                 for(z=0; z < 64; z++)
-                    fileIconImages[ctr][z] = cbmFileIcon[z];
+                    padIcons[ctr].iconData[z] = cbmFileIcon[z];
             }
 
             ctr++;
@@ -388,9 +389,9 @@ void updateDirectory()
         {
             // empty icon space
             for(z=0; z < 63; z++)
-                fileIconImages[ctr][z+1] = 0;
+                padIcons[ctr].iconData[z+1]  = 0;
             
-            fileIconNames[ctr][0] = 0;
+            padIcons[ctr].filename[0] = 0;
             ctr++;
         }
 
@@ -406,14 +407,17 @@ void updateDirectory()
     tmp = (ctr == 8 ? 7 : ctr);
     do
     {
-        updateFileIcon(tmp, fileIconImages[tmp]);
+        // stamp the icon to the pad
+        BitmapUp(&(padIcons[tmp].iconpic));
 
-        startPrint = centerOver(  (fileIcons[tmp].x*8 +fileIcons[tmp].width*8) - (fileIcons[tmp].width*8/2), fileIconNames[tmp]);
+        // calculate the starting point for the filename
+        // so that it is centered under the icon
+        startPrint = centerOver(  (padIcons[tmp].iconpic.x*8 +padIcons[tmp].iconpic.width*8) - (padIcons[tmp].iconpic.width*8/2), padIcons[tmp].filename);
 
         if(tmp < 4)
-            PutString(fileIconNames[tmp], 74, startPrint);               
+            PutString(padIcons[tmp].filename, 74, startPrint);               
         else
-            PutString(fileIconNames[tmp], 114, startPrint);  
+            PutString(padIcons[tmp].filename, 114, startPrint);  
         
         if(tmp == 0)
             break;

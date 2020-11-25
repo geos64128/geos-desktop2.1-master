@@ -35,7 +35,7 @@ void mnu_file_open (void)
     {
         for(tmp=0; tmp<8;tmp++)
         {
-            if(fileIconSelected[tmp] == 1)
+            if(padIcons[tmp].selected == 1)
             {
                 iconHandlerRunApp(tmp);
                 break;
@@ -68,9 +68,9 @@ void mnu_file_info (void)
     {
         for(tmp=0; tmp<8;tmp++)
         {
-            if(fileIconSelected[tmp] == 1)
+            if(padIcons[tmp].selected == 1)
             {
-                info_draw(fileIconNames[tmp]);
+                info_draw(padIcons[tmp].filename);
                 break;
             }
         }
