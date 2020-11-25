@@ -378,7 +378,13 @@ unsigned char dblClickFileIconCheck()
 
 void iconBeginDrag(unsigned char iconnumber)
 {
-    DrawSprite(1, fileIcons[iconnumber].pic_ptr+1);
+    unsigned char tmp;
+
+    if(numSelected > 1)
+        DrawSprite(1, multiFileIcon+1);
+    else
+        DrawSprite(1, fileIcons[iconnumber].pic_ptr+1);
+    
     location.x = mouseXPos-12;
     location.y = mouseYPos-10;
     PosSprite(1, &location);

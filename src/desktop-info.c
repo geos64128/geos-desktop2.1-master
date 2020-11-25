@@ -186,4 +186,7 @@ void on_infoClose()
     DoIcons(myicontab);
 
     unselectAllFileIcons();
+
+    goPage(curPage);
+    updateDirectory();
 }
