@@ -7,6 +7,8 @@
 #define DRIVE_D_TYPE  PEEK(0x8491)
 
 struct icontab *myicontab;
+struct iconpic trashIconPic;
+struct iconpic printerIconPic;
 
 struct padIcon {
     unsigned char iconData[64];

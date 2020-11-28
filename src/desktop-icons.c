@@ -8,7 +8,7 @@ void initIconTable()
     free(myicontab);
     myicontab = (struct icontab*)calloc(1, sizeof(struct icontab));
 
-    myicontab->number = 7;
+    myicontab->number = 5;
     myicontab->mousepos.x = 0;
     myicontab->mousepos.y = 0;
 
@@ -41,29 +41,30 @@ void initIconTable()
     myicontab->tab[3].height = 21;
     myicontab->tab[3].proc_ptr = (unsigned)  iconHandlerDrvD;
 
+    // close disk
+    myicontab->tab[4].pic_ptr = closeIcon;
+    myicontab->tab[4].x = 30; // * 8 
+    myicontab->tab[4].y = 20;
+    myicontab->tab[4].width = 2; // * 8 
+    myicontab->tab[4].height = 11;
+    myicontab->tab[4].proc_ptr = (unsigned)  iconCloseDiskHandler;
+
     // trash
-    myicontab->tab[4].pic_ptr = trashIcon;
-    myicontab->tab[4].x = 35; // * 8 
-    myicontab->tab[4].y = 154;
-    myicontab->tab[4].width = 3; // * 8 
-    myicontab->tab[4].height = 21;
-    myicontab->tab[4].proc_ptr = (unsigned)  iconHandler;
+    trashIconPic.pic_ptr = trashIcon;
+    trashIconPic.x = 35; // * 8 
+    trashIconPic.y = 154;
+    trashIconPic.width = 3; // * 8 
+    trashIconPic.height = 21;
+    BitmapUp(&trashIconPic);
 
     // printer
-    myicontab->tab[5].pic_ptr = printerIcon;
-    myicontab->tab[5].x = 3; // * 8 
-    myicontab->tab[5].y = 154;
-    myicontab->tab[5].width = 3; // * 8 
-    myicontab->tab[5].height = 21;
-    myicontab->tab[5].proc_ptr = (unsigned)  iconHandler;
+    printerIconPic.pic_ptr = printerIcon;
+    printerIconPic.x = 3; // * 8 
+    printerIconPic.y = 154;
+    printerIconPic.width = 3; // * 8 
+    printerIconPic.height = 21;
+    BitmapUp(&printerIconPic);
 
-    // close disk
-    myicontab->tab[6].pic_ptr = closeIcon;
-    myicontab->tab[6].x = 30; // * 8 
-    myicontab->tab[6].y = 20;
-    myicontab->tab[6].width = 2; // * 8 
-    myicontab->tab[6].height = 11;
-    myicontab->tab[6].proc_ptr = (unsigned)  iconCloseDiskHandler;
 
     // file icons
     for(tmp=0; tmp<8;tmp++)
@@ -400,9 +401,29 @@ void iconBeginDrag(unsigned char iconnumber)
 
 void iconEndDrag() 
 {
+    struct window windowTest;
     dragMode = 0;
     DisablSprite(1);
 
+    windowTest.top = trashIconPic.y;
+    windowTest.bot = (trashIconPic.y + trashIconPic.height) - 1;
+    windowTest.left = trashIconPic.x*8;
+    windowTest.right = (trashIconPic.x*8 + trashIconPic.width*8) - 1;
+
+    if(IsMseInRegion(&windowTest))
+    {
+        DlgBoxOk("Confirm","Delete!");
+    }
+
+    windowTest.top = printerIconPic.y;
+    windowTest.bot = (printerIconPic.y + printerIconPic.height) - 1;
+    windowTest.left = printerIconPic.x*8;
+    windowTest.right = (printerIconPic.x*8 + printerIconPic.width*8) - 1;
+
+    if(IsMseInRegion(&windowTest))
+    {
+        DlgBoxOk("Confirm","Print!");
+    }
 
 }
 
